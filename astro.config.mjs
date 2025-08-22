@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm';
 export default defineConfig({
 	site: 'https://abourass.github.io',
 	base: '/TheModernFarm',
+	trailingSlash: "always",
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		remarkPlugins: [
