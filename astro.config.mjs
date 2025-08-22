@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://abourass.github.io',
-	// base: '/TheModernFarm',
+	base: '/TheModernFarm',
 	integrations: [mdx(), sitemap()],
 	markdown: {
 		remarkPlugins: [
