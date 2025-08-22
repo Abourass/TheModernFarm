@@ -41,13 +41,13 @@ Here are the key concepts you should know (or at least look into):
 
 Check out this [wonderful PDF guide here](https://themodern.farm/studies/Soil%20Ecology%20Terms.pdf)!
 
-IMO – Indigenous Microorganism – Often used interchangeably with the acronym BIM, ( meaning Beneficial Indigenous Microorganism. )
+* **IMO (Indigenous Microorganisms)** – Beneficial microbes collected from undisturbed local environments like forests or healthy soil ecosystems. These native organisms are already adapted to your local climate and can provide powerful support for your garden's soil food web. IMOs form the foundation of Korean Natural Farming practices and are particularly effective because they're pre-adapted to your specific growing conditions. Often used interchangeably with the next acronym, BIM.
 
-BIM – Beneficial Indigenous Microorganisms – A culturing method for transplanting microbes from a thriving biointensive (lots of bacterial / fungal life) ecosystem to a new ecosystem. For more info click here
+* **BIM (Beneficial Indigenous Microorganisms)** – A more specific term for cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes (using rice, other grains, or natural substrates), culturing them under controlled conditions, and introducing them to your garden. These beneficial colonies help decompose organic matter, improve nutrient cycling, suppress pathogens, and enhance plant resilience. [Learn how to make your own BIM cultures here](#bim-guide)
 
-EWC – Earthworm castings / compost – For a wonderful write up on the difference in vermicompost vs castings read this. Once you’ve read that, you’re checked that out I want to convey how SERIOUSLY important quality EWC is. If your soil is a house, the EWC & your compost are the foundation. They are your most reliable home for the colony of biotic life you are bringing into your garden. I use Malibu Compost & EWC from BuildASoil, in addition to whatever compost I make at home.
+* **EWC** – Earthworm castings / compost – For a wonderful write up on the difference in vermicompost vs castings read this. Once you’ve read that, you’re checked that out I want to convey how SERIOUSLY important quality EWC is. If your soil is a house, the EWC & your compost are the foundation. They are your most reliable home for the colony of biotic life you are bringing into your garden. I use Malibu Compost & EWC from BuildASoil, in addition to whatever compost I make at home.
 
-SST – Sprouted Seed Tea – These provide hormones, amino acids, enzymes, and tons of other wonderful compounds. The most commonly used are barley (which I use mostly for amino acid content), corn (which I use for cytokinin content), and alfalfa (which I use mostly for triacontanol content). Great recipe on how to use, from Some Old Coot and can be found here.
+* **SST** – Sprouted Seed Tea – These provide hormones, amino acids, enzymes, and tons of other wonderful compounds. The most commonly used are barley (which I use mostly for amino acid content), corn (which I use for cytokinin content), and alfalfa (which I use mostly for triacontanol content). Great recipe on how to use, from Some Old Coot and can be found here.
 
 Do keep in mind that triacontanol is so strong you’ve got to use 1/3 the amount of any other seed.
 There’s a wealth of content on this but to get started check out this photo tutorial.
