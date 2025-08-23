@@ -1,48 +1,184 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+
+// Get recent articles and tutorials
+const articles = (await getCollection("articles"))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3); // Get only the 3 most recent articles
+
+const tutorials = (await getCollection("tutorials"))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 3); // Get only the 3 most recent tutorials
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: 0 auto;
+				padding: 3em 0;
+			}
+
+			.hero-section {
+				margin-bottom: 4rem;
+				text-align: center;
+			}
+
+			.section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 2rem;
+			}
+
+			.view-all {
+				color: rgb(var(--accent));
+				text-decoration: none;
+			}
+
+			ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+				margin-bottom: 3rem;
+			}
+
+			ul li {
+				width: calc(33.333% - 1.333rem);
+			}
+
+			ul li * {
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+
+			ul li img {
+				margin-bottom: 0.5rem;
+				border-radius: 12px;
+				width: 100%;
+				aspect-ratio: 16/9;
+				object-fit: cover;
+			}
+
+			ul li a {
+				display: block;
+			}
+
+			.title {
+				margin: 0;
+				color: rgb(var(--black));
+				line-height: 1.4;
+			}
+
+			.date {
+				margin: 0;
+				color: rgb(var(--gray));
+			}
+
+			ul li a:hover h4,
+			ul li a:hover .date {
+				color: rgb(var(--accent));
+			}
+
+			ul a:hover img {
+				box-shadow: var(--box-shadow);
+			}
+
+			@media (max-width: 720px) {
+				ul {
+					gap: 1rem;
+				}
+				ul li {
+					width: 100%;
+				}
+			}
+		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<section class="hero-section">
+				<h1>The Modern Farm</h1>
+				<p>
+					A resource hub for modern farming techniques, sustainable agriculture,
+					and probiotic farming tutorials.
+				</p>
+			</section>
+
+			<section>
+				<div class="section-header">
+					<h2>Latest Articles</h2>
+					<a href={`${import.meta.env.BASE_URL}/articles/`} class="view-all"
+						>View all articles →</a
+					>
+				</div>
+				<ul>
+					{
+						articles.map((post) => (
+							<li>
+								<a href={`${import.meta.env.BASE_URL}/articles/${post.id}/`}>
+									{post.data.heroImage && (
+										<Image
+											width={400}
+											height={225}
+											src={post.data.heroImage}
+											alt=""
+										/>
+									)}
+									<h4 class="title">{post.data.title}</h4>
+									<p class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section>
+				<div class="section-header">
+					<h2>Featured Tutorials</h2>
+					<a href={`${import.meta.env.BASE_URL}/tutorials/`} class="view-all"
+						>View all tutorials →</a
+					>
+				</div>
+				<ul>
+					{
+						tutorials.map((post) => (
+							<li>
+								<a href={`${import.meta.env.BASE_URL}/tutorials/${post.id}/`}>
+									{post.data.heroImage && (
+										<Image
+											width={400}
+											height={225}
+											src={post.data.heroImage}
+											alt=""
+										/>
+									)}
+									<h4 class="title">{post.data.title}</h4>
+									<p class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
 		</main>
 		<Footer />
 	</body>
