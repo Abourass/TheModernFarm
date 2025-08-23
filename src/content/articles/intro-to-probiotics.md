@@ -43,60 +43,45 @@ Check out this [wonderful PDF guide here](https://themodern.farm/studies/Soil%20
 
 * **IMO (Indigenous Microorganisms)** – Beneficial microbes collected from undisturbed local environments like forests or healthy soil ecosystems. These native organisms are already adapted to your local climate and can provide powerful support for your garden's soil food web. IMOs form the foundation of Korean Natural Farming practices and are particularly effective because they're pre-adapted to your specific growing conditions. Often used interchangeably with the next acronym, BIM.
 
-* **BIM (Beneficial Indigenous Microorganisms)** – A more specific term for cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes (using rice, other grains, or natural substrates), culturing them under controlled conditions, and introducing them to your garden. These beneficial colonies help decompose organic matter, improve nutrient cycling, suppress pathogens, and enhance plant resilience. [Learn how to make your own BIM cultures here](#bim-guide)
+* **BIM (Beneficial Indigenous Microorganisms)** – A more specific term for cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes (using rice, other grains, or natural substrates), culturing them under controlled conditions, and introducing them to your garden. These beneficial colonies help decompose organic matter, improve nutrient cycling, suppress pathogens, and enhance plant resilience. [Learn how to make your own BIM cultures here](/TheModernFarm/tutorials/bim-culturing)
 
 * **EWC** – Earthworm castings / compost – For a wonderful write up on the difference in vermicompost vs castings read this. Once you’ve read that, you’re checked that out I want to convey how SERIOUSLY important quality EWC is. If your soil is a house, the EWC & your compost are the foundation. They are your most reliable home for the colony of biotic life you are bringing into your garden. I use Malibu Compost & EWC from BuildASoil, in addition to whatever compost I make at home.
 
 * **SST** – Sprouted Seed Tea – These provide hormones, amino acids, enzymes, and tons of other wonderful compounds. The most commonly used are barley (which I use mostly for amino acid content), corn (which I use for cytokinin content), and alfalfa (which I use mostly for triacontanol content). Great recipe on how to use, from Some Old Coot and can be found here.
 
-Do keep in mind that triacontanol is so strong you’ve got to use 1/3 the amount of any other seed.
-There’s a wealth of content on this but to get started check out this photo tutorial.
+* **SWC** – Seaweed Concentrate – Kelp, but treated with an acid to increase solubility. This akin to Orange Juice vs Tang, (Not sure who said that first, it was someone over at LOS Forum, cheers to them, it’s a perfect metaphor).
 
-Modern Gardening Notes:
-Use alfalfa SST when transitioning to flower to reduce internodal space.
-Use barley SST once a week in veg, and at week four of flower in conjunction with corn SST.
-Use Corn SST once a week for first three – four (up to week 7 in on a 12 week plant, up to week 9 in a 14 week plant) weeks of flower.
-Every other SST in veg I use the 1/2 cup of flax with the barley.
-Past two nodes, they start getting full strength SST.
-At one node I give them 1/3 strength SST.
-No SST for sprouts
-The high enzymatic content of barley aids in the conversion of dead roots by beneficial bacteria, keeping roots healthy, and the soil moving (in terms of the soil food web). This and much more is accomplished, in part, because enzymes lower the energy potential required to complete metabolic action by microbes, fungi, and the plant itself. This is one of the ways we can speed up the actions happening in the soil-food web, while maintaining balance of the life in the soil. (a concept I like to call ‘Accelerated Homeostasis’; more on that another time)
-Alfalfa’s tricanotol rate when used correctly will thicken root mass, and keep slightly shorter internodal space (esp. when used during transition to flower), by making the plant focus on lengthening / strengthening the branches which allows it to more easily support higher yields. Try using Corn at double strength (twice the amount sprouted), with the normal 1/3 a standard measurement for the alfalfa (don’t mess with high Alf Seeds, your plants will look like mutants if you do) – At this strength a plant really squats and become quite buff!
-The corn SST provides the highest cytokinin, which promotes thicker stems, for better transport of nutrients, and of course the easier time supporting larger fruits.
-Don’t sprout the flax, add it when blending / grinding the sprouted barley. The reason we don’t sprout it is that flax is mucilaginous it doesn’t sprout like most sprouts. This is because once it meets water it forms a gel sack which surrounds the seed. This evolved to interfere with bacterial bio-slime from what I’ve read. I use it almost solely for its unique fatty acid complex, so sprouting would cause it to start using these fatty acid to make hormones/phytohormones we are getting elsewhere.
+  Ascophyllum nodosum extracts contain various betaines and betaine-like compounds. In plants, betaines serve as a compatible solute that alleviates osmotic stress induced by salinity and drought stress; however, other roles have also been suggested, such as enhancing leaf chlorophyll content of plants following their treatment with seaweed extracts. Yield enhancement effects due to improved chlorophyll content in leaves of various crop plants have been attributed to the betaines present in the seaweed. It has been indicated that betaine may work as a nitrogen source when provided in low concentration and serve as an osmolyte at higher concentrations Betaines have been shown to play a part in successful formation of somatic embryos from cotyledonary tissues and mature seeds of tea. – The use of seaweed-based products from Ecklonia maxima and Ascophyllum nodosum as control agents for Meloidogyne chitwoodi and M. hapla on tomato plants
 
-SWC – Seaweed Concentrate – Kelp, but treated with an acid to increase solubility. This akin to Orange Juice vs Tang, (Not sure who said that first, it was someone over at LOS Forum, cheers to them, it’s a perfect metaphor).
+  Application of seaweeds and seaweed extracts triggers the growth of beneficial soil microbes and secretion of soil conditioning substances by these microbes. As mentioned, alginates affect soil properties and encourage growth of beneficial fungi. Ishii and others (2000) observed that alginate oligosaccharides, produced by enzymatic degradation of alginic acid mainly extracted from brown algae, significantly stimulated hyphal growth and elongation of arbuscular mycorrhizal (AM) fungi and triggered their infectivity on trifoliate orange seedlings. – Seaweed Extracts as Biostimulants of Plant Growth and Development
 
-Ascophyllum nodosum extracts contain various betaines and betaine-like compounds. In plants, betaines serve as a compatible solute that alleviates osmotic stress induced by salinity and drought stress; however, other roles have also been suggested, such as enhancing leaf chlorophyll content of plants following their treatment with seaweed extracts. Yield enhancement effects due to improved chlorophyll content in leaves of various crop plants have been attributed to the betaines present in the seaweed. It has been indicated that betaine may work as a nitrogen source when provided in low concentration and serve as an osmolyte at higher concentrations Betaines have been shown to play a part in successful formation of somatic embryos from cotyledonary tissues and mature seeds of tea. – The use of seaweed-based products from Ecklonia maxima and Ascophyllum nodosum as control agents for Meloidogyne chitwoodi and M. hapla on tomato plants
+* **LAB** – Lactobacillus Serum Click here for a guide to culturing LAB
 
-Application of seaweeds and seaweed extracts triggers the growth of beneficial soil microbes and secretion of soil conditioning substances by these microbes. As mentioned, alginates affect soil properties and encourage growth of beneficial fungi. Ishii and others (2000) observed that alginate oligosaccharides, produced by enzymatic degradation of alginic acid mainly extracted from brown algae, significantly stimulated hyphal growth and elongation of arbuscular mycorrhizal (AM) fungi and triggered their infectivity on trifoliate orange seedlings. – Seaweed Extracts as Biostimulants of Plant Growth and Development
+* **EM-1** – Effective Microorganism. First defined by Teruo Higa in the paper: The Concept and Theories of Effective Microorganism
 
-LAB – Lactobacillus Serum Click here for a guide to culturing LAB
+  Effective Microorganisms, aka EM Technology, is a trademarked term now commonly used to describe a proprietary blend of 3 or more types of predominantly anaerobic organisms that was originally marketed as EM-1™ Microbial Inoculant but is now marketed by a plethora of companies under various names, each with their own proprietary blend. “EM™ Technology” uses a laboratory cultured mixture of microorganisms consisting mainly of lactic acid bacteria, purple bacteria, and yeast which co-exist for the benefit of whichever environment they are introduced, as has been claimed by the various em-like culture purveyors. It is reported to include:
+  * Lactic acid bacteria: Lactobacillus plantarum; L. casei; Streptococcus Lactis.
+  * Photosynthetic bacteria: Rhodopseudomonas palustris; Rhodobacter sphaeroides.
+  * Yeast: Saccharomyces cerevisiae; Candida utilis (These species are no longer cultured for, but some some palustris does end up from the basic LAB process).
+  * Actinomycetes (no longer used in the formulas): Streptomyces albus; S. griseus.
 
-EM-1 – Effective Microorganism. First defined by Teruo Higa in the paper: The Concept and Theories of Effective Microorganism
+  So these days, for one reason or another, what is sold as EM-1 is Lactobacillus plantarum, Lactobacillus casei, Lactobacillus fermentum, Lactobacillus delbrueckii, Bacillus subtilis, Saccharomyces cerevisiae, Rhodopseudomonas palustris.
 
-Effective Microorganisms, aka EM Technology, is a trademarked term now commonly used to describe a proprietary blend of 3 or more types of predominantly anaerobic organisms that was originally marketed as EM-1™ Microbial Inoculant but is now marketed by a plethora of companies under various names, each with their own proprietary blend. “EM™ Technology” uses a laboratory cultured mixture of microorganisms consisting mainly of lactic acid bacteria, purple bacteria, and yeast which co-exist for the benefit of whichever environment they are introduced, as has been claimed by the various em-like culture purveyors. It is reported to include:
-Lactic acid bacteria: Lactobacillus plantarum; L. casei; Streptococcus Lactis.
-Photosynthetic bacteria: Rhodopseudomonas palustris; Rhodobacter sphaeroides.
-Yeast: Saccharomyces cerevisiae; Candida utilis (These species are no longer cultured for, but some some palustris does end up from the basic LAB process).
-Actinomycetes (no longer used in the formulas): Streptomyces albus; S. griseus.
+  “Effective microorganisms make amino acids useful to plants, and organic acids, polysaccharides and vitamins strengthen their immune systems. EM1 consists of a water solution that contains compounds that promote nitrogen fixation and photosynthesis, along with lactic bacteria, yeast and other components that these microorganisms need to live ” – (Shablin, 2006)
 
-So these days, for one reason or another, what is sold as EM-1 is Lactobacillus plantarum, Lactobacillus casei, Lactobacillus fermentum, Lactobacillus delbrueckii, Bacillus subtilis, Saccharomyces cerevisiae, Rhodopseudomonas palustris.
+  Commonly, you will be referred here when you learn about EM-1. Which you will notice is the same recipe when we speak of LAB. This recipe gives you LAB, not EM-1, as there are no PNSB / Yeast.
+  What is sold here is different then when we make LAB.
 
-“Effective microorganisms make amino acids useful to plants, and organic acids, polysaccharides and vitamins strengthen their immune systems. EM1 consists of a water solution that contains compounds that promote nitrogen fixation and photosynthesis, along with lactic bacteria, yeast and other components that these microorganisms need to live ” – (Shablin, 2006)
+* **PNSB** – Purple Non-Sulphur Bacteria – Rhodopseudomonas palustris, and other purple non-sulphur bacteria are powerhouse of bioremediation, among so many uses It’ll take me a while to source all the relevant studies on it. Some quick highlights from a grower’s perspective, keeps stagnant water from becoming a death trap for clones & beginners that are over watering, eats algae, helps keep balance of ph in the medium esp. in the first cycle or two of the soil.
 
-Commonly, you will be referred here when you learn about EM-1. Which you will notice is the same recipe when we speak of LAB. This recipe gives you LAB, not EM-1, as there are no PNSB / Yeast.
-What is sold here is different then when we make LAB.
+* **FPE** – Fermented Plant Extract – A great way to create a organic fertilizer for your garden. Wonderful introductions to this can be found here and another here.
 
-PNSB – Purple Non-Sulphur Bacteria – Rhodopseudomonas palustris, and other purple non-sulphur bacteria are powerhouse of bioremediation, among so many uses It’ll take me a while to source all the relevant studies on it. Some quick highlights from a grower’s perspective, keeps stagnant water from becoming a death trap for clones & beginners that are over watering, eats algae, helps keep balance of ph in the medium esp. in the first cycle or two of the soil.
+* **AACT** – Actively Aerated Compost Tea – Sometimes people just write ACT, still referencing the same thing; brewing tea with some form of oxygen stimulation (bubblers, whirlpool). You can find recipe on the Methods page.
 
-FPE – Fermented Plant Extract – A great way to create a organic fertilizer for your garden. Wonderful introductions to this can be found here and another here.
+* **SAR** – Systemic Acquired Resistance – Please start by reading this journal . This is such a massive and important subject it will demand its own post.
 
-AACT – Actively Aerated Compost Tea – Sometimes people just write ACT, still referencing the same thing; brewing tea with some form of oxygen stimulation (bubblers, whirlpool). You can find recipe on the Methods page.
-
-SAR – Systemic Acquired Resistance – Please start by reading this journal . This is such a massive and important subject it will demand its own post.
-
-IPM – Integrated Pest Management – This is one of our primary ways of increasing SAR, and utilizing practice that make our gardens inhospitable to pest. To take your first steps down this road read here.
+* **IPM** – Integrated Pest Management – This is one of our primary ways of increasing SAR, and utilizing practice that make our gardens inhospitable to pest. To take your first steps down this road read here.
 
 Less common:
-SA – Salicylic Acid
+
+* **SA** – Salicylic Acid
