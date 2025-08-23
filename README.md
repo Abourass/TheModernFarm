@@ -1,62 +1,59 @@
-# Astro Starter Kit: Blog
+# The Modern Farm
 
-```sh
-pnpm create astro@latest -- --template blog
-```
+A website dedicated to modern farming techniques, sustainable agriculture, and probiotic farming tutorials built with [Astro](https://astro.build/).
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🌱 About
 
-Features:
+The Modern Farm is a resource hub for modern farming techniques, sustainable agriculture practices, and hands-on probiotic farming tutorials built from the ground up by me, ModernCannabist.
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+## 📝 Contributing Corrections
+
+Found an error or have a suggestion for improving an article or tutorial? I welcome your feedback!
+
+### How to Submit a Correction
+
+1. **Create a GitHub Issue**:
+   - Navigate to the [Issues tab](https://github.com/abourass/TheModernFarm/issues)
+   - Click "New Issue"
+   - Use the title format: `[Correction] Article/Tutorial Title`
+   - Describe the issue and suggested correction
+   - Include the page URL where you found the error
+
+2. **Pull Requests**:
+   - For more substantial contributions, you're welcome to fork the repository and submit pull requests
+   - Please follow the project structure when adding or modifying content
+
+I review all submissions and greatly appreciate your help in maintaining accurate information!
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
-
 ```text
-├── public/
+├── public/            # Static assets
 ├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+│   ├── assets/        # Images and other assets processed by Astro
+│   ├── components/    # Reusable Astro components
+│   ├── content/       # Markdown/MDX content collections
+│   │   ├── articles/  # Farming and agriculture articles
+│   │   └── tutorials/ # Step-by-step how-to guides
+│   ├── layouts/       # Page layout templates
+│   └── pages/         # Page routes and endpoints
+├── astro.config.mjs   # Astro configuration
+└── package.json       # Project dependencies
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
+## 🧞 Development Commands
 
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+| `pnpm install`            | Installs dependencies                            |
+| `pnpm dev`                | Starts local dev server at `localhost:4321`      |
+| `pnpm build`              | Build the production site to `./dist/`           |
+| `pnpm preview`            | Preview your build locally, before deploying     |
 
-## 👀 Want to learn more?
+## 📱 Connect
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Join our [Discord community](https://discord.gg/2h7psMzv)
 
-## Credit
+## 📄 License
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Content is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) unless otherwise noted.
