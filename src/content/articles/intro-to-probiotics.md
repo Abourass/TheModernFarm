@@ -2,7 +2,7 @@
 title: 'Intro to Probiotic Gardening'
 description: "A beginner's guide to understanding and implementing probiotic gardening techniques."
 pubDate: 'Aug 22 2025'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+heroImage: '../../assets/moonwalk.webp'
 ---
 
 Diving into probiotic gardening can feel like learning a new language at first. Whether you know it as probiotic, bio-intensive, or no-till growing, the techniques and terminology can seem overwhelming; especially when you're cultivating plants for your own medicine or depending on your garden for your livelihood. That's why I've created this straightforward introduction to simplify your journey. Consider this your friendly guide to getting started, and remember, if you have questions or need personalized advice, I'm just a message away on Discord.
@@ -45,7 +45,7 @@ Check out this [wonderful PDF guide here](https://themodern.farm/studies/Soil%20
 
 * **BIM (Beneficial Indigenous Microorganisms)** – A more specific term for cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes (using rice, other grains, or natural substrates), culturing them under controlled conditions, and introducing them to your garden. These beneficial colonies help decompose organic matter, improve nutrient cycling, suppress pathogens, and enhance plant resilience. [Learn how to make your own BIM cultures here](/TheModernFarm/tutorials/bim-culturing)
 
-* **EWC** – Earthworm castings / compost – For a wonderful write up on the difference in vermicompost vs castings read this. Once you’ve read that, you’re checked that out I want to convey how SERIOUSLY important quality EWC is. If your soil is a house, the EWC & your compost are the foundation. They are your most reliable home for the colony of biotic life you are bringing into your garden. I use Malibu Compost & EWC from BuildASoil, in addition to whatever compost I make at home.
+* **EWC** – Earthworm castings / compost – For a wonderful write up on the difference in vermicompost vs castings [read this article](/TheModernFarm/resources/vermicompost-vs-castings). I cannot overstate how SERIOUSLY important quality EWC is. If your soil is a house, the EWC & your compost are the foundation. I use Malibu Compost & EWC from Rocky Mountain EWC, in addition to whatever compost I make at home.
 
 * **SST** – Sprouted Seed Tea – These provide hormones, amino acids, enzymes, and tons of other wonderful compounds. The most commonly used are barley (which I use mostly for amino acid content), corn (which I use for cytokinin content), and alfalfa (which I use mostly for triacontanol content). Great recipe on how to use, from Some Old Coot and can be found here.
 
