@@ -31,6 +31,29 @@ const baseURL = import.meta.env.BASE_URL || "/";
 />
 <meta name="generator" content={Astro.generator} />
 
+<script is:inline>
+  function initTheme() {
+    // Check for saved preference in localStorage
+    const savedTheme = localStorage.getItem('theme');
+    
+    // If user has explicitly set a preference, use that
+    if (savedTheme) {
+      document.documentElement.classList.toggle('dark-theme', savedTheme === 'dark');
+      document.body.classList.toggle('dark-theme', savedTheme === 'dark');
+    } 
+    // Otherwise, respect OS preference
+    else {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.toggle('dark-theme', prefersDark);
+      document.body.classList.toggle('dark-theme', prefersDark);
+      // Save this initial preference
+      localStorage.setItem('theme', prefersDark ? 'dark' : 'light');
+    }
+  }
+  // Run immediately
+  initTheme();
+</script>
+
 <!-- Font preloads -->
 <link
 	rel="preload"
