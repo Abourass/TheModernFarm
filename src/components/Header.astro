@@ -17,6 +17,22 @@ import HeaderLink from "./HeaderLink.astro";
             <HeaderLink href="/TheModernFarm/about">About</HeaderLink>
         </div>
         <div class="social-links">
+    <button id="theme-toggle" aria-label="Toggle dark mode">
+        <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
             <a href="https://discord.gg/2h7psMzv" target="_blank">
                 <span class="sr-only">Join the Modern Farm discord!</span>
                 <svg
@@ -47,12 +63,51 @@ import HeaderLink from "./HeaderLink.astro";
         </div>
     </nav>
 </header>
+
+<script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+    const rootElement = document.documentElement;
+    const header = document.querySelector('header');
+    
+    // Check for saved theme preference or default to light theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    
+    // Function to set theme
+    function setTheme(theme: any) {
+        if (theme === 'dark') {
+            rootElement.classList.add('dark-theme');
+            document.body.classList.add('dark-theme');
+            sunIcon!.style.display = 'none';
+            moonIcon!.style.display = 'block';
+        } else {
+            rootElement.classList.remove('dark-theme');
+            document.body.classList.remove('dark-theme');
+            sunIcon!.style.display = 'block';
+            moonIcon!.style.display = 'none';
+        }
+        localStorage.setItem('theme', theme);
+    }
+    
+    // Set initial theme
+    setTheme(savedTheme);
+    
+    // Toggle theme when button is clicked
+    themeToggle!.addEventListener('click', () => {
+        const currentTheme = rootElement.classList.contains('dark-theme') ? 'light' : 'dark';
+        setTheme(currentTheme);
+    });
+</script>
+
 <style>
     header {
         margin: 0;
         padding: 0 1em;
-        background: white;
+        background: var(--background-color);
         box-shadow: 0 2px 8px rgba(var(--black), 5%);
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
     h2 {
         margin: 0;
@@ -62,6 +117,7 @@ import HeaderLink from "./HeaderLink.astro";
     h2 a,
     h2 a.active {
         text-decoration: none;
+        color: var(--heading-color);
     }
     nav {
         display: flex;
@@ -75,13 +131,15 @@ import HeaderLink from "./HeaderLink.astro";
         width: 272.77px; /* Same width as site title for balance */
         display: flex;
         justify-content: flex-end;
+        align-items: center;
+        gap: 0.5em;
     }
     .social-links a {
         display: flex;
     }
     nav a {
         padding: 1em 0.5em;
-        color: var(--black);
+        color: var(--text-color);
         border-bottom: 4px solid transparent;
         text-decoration: none;
     }
@@ -89,8 +147,28 @@ import HeaderLink from "./HeaderLink.astro";
         text-decoration: none;
         border-bottom-color: var(--accent);
     }
+    #theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+    }
+    #sun-icon, #moon-icon {
+        width: 24px;
+        height: 24px;
+    }
+    #moon-icon {
+        display: none;
+    }
     @media (max-width: 720px) {
         .social-links {
+            width: auto;
+        }
+        .social-links a:not(:first-child) {
             display: none;
         }
         /* Ensure internal links stay centered on mobile */
