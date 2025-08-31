@@ -73,8 +73,9 @@ import HeaderLink from "./HeaderLink.astro";
     
     function updateThemeIcon(isDark: boolean) {
         if (sunIcon && moonIcon) {
-            sunIcon.style.display = isDark ? 'none' : 'block';
-            moonIcon.style.display = isDark ? 'block' : 'none';
+            // show sun in dark mode, moon in light mode
+            sunIcon.style.display = isDark ? 'block' : 'none';
+            moonIcon.style.display = isDark ? 'none' : 'block';
         }
     }
 
@@ -163,13 +164,29 @@ import HeaderLink from "./HeaderLink.astro";
         align-items: center;
         justify-content: center;
         color: var(--text-color);
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
     #sun-icon, #moon-icon {
-        width: 24px;
-        height: 24px;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        transition: fill 0.3s ease;
+        fill: none;
     }
     #moon-icon {
         display: none;
+    }
+
+    /* Light mode styles */
+    :root:not(.dark-theme) #moon-icon:hover {
+        fill: rgba(var(--gray-dark), 1);
+    }
+    
+    /* Dark mode styles */
+    :root.dark-theme #sun-icon:hover {
+        fill: rgba(255, 255, 150, .8);
     }
     @media (max-width: 720px) {
         .social-links {
