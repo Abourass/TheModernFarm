@@ -5,30 +5,56 @@
  */
 
 :root {
-    --accent: #265b70;
-    --accent-dark: #000d8a;
-    --black: 15, 18, 25;
-    --gray: 96, 115, 159;
-    --gray-light: 229, 233, 240;
-    --gray-dark: 34, 41, 57;
-    --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+    /* Teal accent colors */
+    --accent: #0d9488;
+    --accent-light: #14b8a6;
+    --accent-dark: #0f766e;
+    
+    /* Stone-toned grays for warmth */
+    --black: 28, 25, 23;
+    --gray: 120, 113, 108;
+    --gray-light: 245, 245, 244;
+    --gray-dark: 41, 37, 36;
+    --stone-50: #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    
+    --gray-gradient: rgba(var(--gray-light), 50%), var(--stone-50);
     --box-shadow:
-        0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
-    --background-color: #ffffff;
+        0 2px 6px rgba(var(--gray), 15%), 0 8px 24px rgba(var(--gray), 10%), 0 16px 32px rgba(var(--gray), 8%);
+    --background-color: var(--stone-50);
     --text-color: rgb(var(--gray-dark));
     --heading-color: rgb(var(--black));
+    
+    /* Glossary term styling */
+    --glossary-underline: #14b8a6;
+    --glossary-underline-hover: #0d9488;
 }
 
 :root.dark-theme {
-    --accent: #5b9fb5;
-    --accent-dark: #6577ff;
-    --black: 230, 230, 230;
-    --gray: 180, 190, 215;
-    --gray-light: 40, 45, 55;
-    --gray-dark: 220, 225, 235;
-    --gray-gradient: rgba(var(--gray-light), 50%), #1a1a1a;
-    --background-color: #1a1a1a;
+    /* Teal accents for dark mode */
+    --accent: #14b8a6;
+    --accent-light: #2dd4bf;
+    --accent-dark: #0d9488;
+    
+    /* Warm dark tones */
+    --black: 250, 250, 249;
+    --gray: 168, 162, 158;
+    --gray-light: 41, 37, 36;
+    --gray-dark: 231, 229, 228;
+    --stone-50: #1c1917;
+    --stone-100: #292524;
+    --stone-200: #44403c;
+    --stone-300: #57534e;
+    
+    --gray-gradient: rgba(var(--gray-light), 50%), #1c1917;
+    --background-color: #1c1917;
     --text-color: rgb(var(--gray));
+    
+    /* Glossary term styling */
+    --glossary-underline: #2dd4bf;
+    --glossary-underline-hover: #14b8a6;
     --heading-color: rgb(var(--black));
     --box-shadow:
         0 2px 6px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.4), 0 16px 32px rgba(0, 0, 0, 0.4);
@@ -66,13 +92,18 @@
 	font-display: swap;
 }
 
+/* System font stack for navigation */
+.nav-text {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 body {
     font-family: "Atkinson", sans-serif;
     margin: 0;
     padding: 0;
     text-align: left;
     background: linear-gradient(var(--gray-gradient)) no-repeat;
-    background-size: 100% 600px;
+    background-size: 100% 800px;
     background-color: var(--background-color);
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -122,10 +153,11 @@ b {
 
 a {
 	color: var(--accent);
+	transition: color 0.2s ease;
 }
 
 a:hover {
-	color: var(--accent);
+	color: var(--accent-dark);
 }
 
 p {

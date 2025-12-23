@@ -24,85 +24,259 @@ const tutorials = (await getCollection("tutorials"))
 		<style>
 			main {
 				width: 960px;
-				max-width: calc(100% - 2em);
+				max-width: calc(100% - 4em);
 				margin: 0 auto;
-				padding: 3em 0;
+				padding: 0;
 			}
 
+			/* Hero Section - Modernist Cuisine inspired */
 			.hero-section {
-				margin-bottom: 4rem;
-				text-align: center;
+				display: grid;
+				grid-template-columns: 7fr 5fr;
+				gap: 2rem;
+				padding: 6rem 0;
+				align-items: center;
+			}
+
+			.hero-content {
+				max-width: 600px;
+			}
+
+			.hero-tagline {
+				font-size: 0.75rem;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				color: var(--accent);
+				margin-bottom: 1rem;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.hero-title {
+				font-size: 3rem;
+				font-weight: 300;
+				line-height: 1.15;
+				margin-bottom: 1.5rem;
+				color: rgb(var(--black));
+			}
+
+			.hero-description {
+				font-size: 1.125rem;
+				color: rgb(var(--gray));
+				line-height: 1.7;
+				margin: 0;
+			}
+
+			.hero-visual {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+
+			/* Abstract soil food web diagram */
+			.soil-web-diagram {
+				position: relative;
+				width: 280px;
+				height: 280px;
+			}
+
+			.orbit {
+				position: absolute;
+				border: 1px solid rgba(var(--gray), 0.2);
+				border-radius: 50%;
+			}
+
+			.orbit-1 {
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+			}
+
+			.orbit-2 {
+				width: 70%;
+				height: 70%;
+				top: 15%;
+				left: 15%;
+			}
+
+			.orbit-3 {
+				width: 40%;
+				height: 40%;
+				top: 30%;
+				left: 30%;
+			}
+
+			.node {
+				position: absolute;
+				border-radius: 50%;
+			}
+
+			.node-center {
+				width: 24px;
+				height: 24px;
+				background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+
+			.node-1 {
+				width: 12px;
+				height: 12px;
+				background: var(--accent-light);
+				opacity: 0.8;
+				top: 10%;
+				left: 48%;
+			}
+
+			.node-2 {
+				width: 16px;
+				height: 16px;
+				background: var(--accent);
+				opacity: 0.6;
+				top: 75%;
+				left: 20%;
+			}
+
+			.node-3 {
+				width: 10px;
+				height: 10px;
+				background: var(--accent-light);
+				opacity: 0.7;
+				top: 60%;
+				left: 80%;
+			}
+
+			.node-4 {
+				width: 8px;
+				height: 8px;
+				background: var(--accent);
+				opacity: 0.5;
+				top: 25%;
+				left: 15%;
+			}
+
+			/* Divider */
+			.section-divider {
+				height: 1px;
+				background: linear-gradient(to right, transparent, rgb(var(--gray-light)), transparent);
+				margin: 0 0 4rem 0;
+			}
+
+			/* Section styling */
+			.content-section {
+				padding: 0 0 4rem 0;
 			}
 
 			.section-header {
 				display: flex;
 				justify-content: space-between;
-				align-items: center;
+				align-items: baseline;
 				margin-bottom: 2rem;
 			}
 
-			.view-all {
-				color: rgb(var(--accent));
-				text-decoration: none;
+			.section-title {
+				font-size: 1.5rem;
+				font-weight: 300;
+				margin: 0;
 			}
 
+			.view-all {
+				font-size: 0.875rem;
+				color: var(--accent);
+				text-decoration: none;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.view-all:hover {
+				color: var(--accent-dark);
+			}
+
+			/* Article grid */
 			ul {
-				display: flex;
-				flex-wrap: wrap;
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
-				margin-bottom: 3rem;
 			}
 
 			ul li {
-				width: calc(33.333% - 1.333rem);
+				background: white;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				overflow: hidden;
+				transition: box-shadow 0.2s ease, transform 0.2s ease;
 			}
 
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
+			:root.dark-theme ul li {
+				background: rgba(255, 255, 255, 0.03);
+				border-color: rgba(255, 255, 255, 0.08);
+			}
+
+			ul li:hover {
+				box-shadow: 0 8px 30px rgba(var(--gray), 0.15);
+				transform: translateY(-2px);
 			}
 
 			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
 				width: 100%;
 				aspect-ratio: 16/9;
 				object-fit: cover;
+				border-radius: 0;
+				margin: 0;
 			}
 
 			ul li a {
 				display: block;
+				text-decoration: none;
+			}
+
+			.card-content {
+				padding: 1.25rem;
 			}
 
 			.title {
-				margin: 0;
+				margin: 0 0 0.5rem 0;
 				color: rgb(var(--black));
 				line-height: 1.4;
+				font-size: 1.1rem;
 			}
 
 			.date {
 				margin: 0;
 				color: rgb(var(--gray));
+				font-size: 0.875rem;
 			}
 
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
+			ul li a:hover .title {
+				color: var(--accent);
 			}
 
 			@media (max-width: 720px) {
-				ul {
-					gap: 1rem;
+				.hero-section {
+					grid-template-columns: 1fr;
+					padding: 3rem 0;
+					text-align: center;
 				}
-				ul li {
-					width: 100%;
+
+				.hero-visual {
+					order: -1;
+				}
+
+				.soil-web-diagram {
+					width: 180px;
+					height: 180px;
+				}
+
+				.hero-title {
+					font-size: 2rem;
+				}
+
+				ul {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
 				}
 			}
 		</style>
@@ -111,16 +285,32 @@ const tutorials = (await getCollection("tutorials"))
 		<Header />
 		<main>
 			<section class="hero-section">
-				<!-- <h1 class="rockybilly">The Modern Farm</h1> -->
-				<p>
-					A resource hub for modern farming techniques, sustainable agriculture,
-					and probiotic farming tutorials.
-				</p>
+				<div class="hero-content">
+					<p class="hero-tagline">Probiotic Cultivation, Decoded</p>
+					<h1 class="hero-title">Understanding the science behind living soil systems</h1>
+					<p class="hero-description">
+						Rigorous explorations of soil biology, fermentation science, and plant physiology—for growers who want to understand the why, not just follow recipes.
+					</p>
+				</div>
+				<div class="hero-visual">
+					<div class="soil-web-diagram">
+						<div class="orbit orbit-1"></div>
+						<div class="orbit orbit-2"></div>
+						<div class="orbit orbit-3"></div>
+						<div class="node node-center"></div>
+						<div class="node node-1"></div>
+						<div class="node node-2"></div>
+						<div class="node node-3"></div>
+						<div class="node node-4"></div>
+					</div>
+				</div>
 			</section>
 
-			<section>
+			<div class="section-divider"></div>
+
+			<section class="content-section">
 				<div class="section-header">
-					<h2>Latest Articles</h2>
+					<h2 class="section-title">Latest Articles</h2>
 					<a href={`${import.meta.env.BASE_URL}/articles/`} class="view-all"
 						>View all articles →</a
 					>
@@ -138,10 +328,12 @@ const tutorials = (await getCollection("tutorials"))
 											alt=""
 										/>
 									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+									<div class="card-content">
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</div>
 								</a>
 							</li>
 						))
@@ -149,9 +341,9 @@ const tutorials = (await getCollection("tutorials"))
 				</ul>
 			</section>
 
-			<section>
+			<section class="content-section">
 				<div class="section-header">
-					<h2>Featured Tutorials</h2>
+					<h2 class="section-title">Featured Tutorials</h2>
 					<a href={`${import.meta.env.BASE_URL}/tutorials/`} class="view-all"
 						>View all tutorials →</a
 					>
@@ -169,10 +361,12 @@ const tutorials = (await getCollection("tutorials"))
 											alt=""
 										/>
 									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+									<div class="card-content">
+										<h4 class="title">{post.data.title}</h4>
+										<p class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</p>
+									</div>
 								</a>
 							</li>
 						))
