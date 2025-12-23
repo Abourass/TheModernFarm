@@ -1,0 +1,245 @@
+{
+  "terms": {
+    "LAB": {
+      "term": "Lactic Acid Bacteria",
+      "abbreviation": "LAB",
+      "definition": "Beneficial microorganisms that ferment sugars into lactic acid. Key species include Lactobacillus plantarum and L. casei. LAB lower pH, outcompete pathogens, and may produce plant-beneficial metabolites.",
+      "related": ["LABS", "EM-1", "FPE", "fermentation"],
+      "category": "microbiology",
+      "articleLink": "/articles/impact-of-LAB"
+    },
+    "LABS": {
+      "term": "Lactic Acid Bacteria Serum",
+      "abbreviation": "LABS",
+      "definition": "A cultured solution of lactic acid bacteria, typically made by fermenting rice wash water with milk. Used as a microbial inoculant and soil drench.",
+      "related": ["LAB", "EM-1", "KNF"],
+      "category": "preparations",
+      "articleLink": "/articles/impact-of-LAB"
+    },
+    "SAR": {
+      "term": "Systemic Acquired Resistance",
+      "abbreviation": "SAR",
+      "definition": "A plant-wide immune response triggered by local pathogen infection. Mediated primarily by salicylic acid signaling, SAR primes the entire plant against future attacks.",
+      "related": ["JAR", "salicylic acid", "IPM"],
+      "category": "plant-biology",
+      "articleLink": "/articles/musings-on-sar-and-jar/"
+    },
+    "JAR": {
+      "term": "Jasmonic Acid Response",
+      "abbreviation": "JAR",
+      "definition": "A plant defense pathway activated by wounding or herbivore attack. Jasmonic acid signaling triggers production of defensive compounds and can increase trichome density.",
+      "related": ["SAR", "trichomes", "harpin"],
+      "category": "plant-biology",
+      "articleLink": "/articles/musings-on-SAR-and-JAR"
+    },
+    "FPE": {
+      "term": "Fermented Plant Extract",
+      "abbreviation": "FPE",
+      "definition": "A biostimulant created by fermenting fresh plant material with sugar. The fermentation process extracts nutrients and produces beneficial microorganisms and organic acids.",
+      "related": ["LAB", "KNF", "SST"],
+      "category": "preparations"
+    },
+    "KNF": {
+      "term": "Korean Natural Farming",
+      "abbreviation": "KNF",
+      "definition": "A collection of farming techniques developed by Cho Han-kyu emphasizing indigenous microorganisms, fermented inputs, and natural nutrient cycling. Core practices include IMO collection, FPE, and LABS production.",
+      "related": ["IMO", "BIM", "FPE", "LABS"],
+      "category": "methodology",
+      "articleLink": "/articles/intro-to-probiotics"
+    },
+    "IMO": {
+      "term": "Indigenous Microorganisms",
+      "abbreviation": "IMO",
+      "definition": "Beneficial microbes collected from undisturbed local environments like forests or healthy soil. These native organisms are pre-adapted to local conditions and form the foundation of KNF practices.",
+      "related": ["BIM", "KNF"],
+      "category": "microbiology",
+      "articleLink": "/articles/intro-to-probiotics"
+    },
+    "BIM": {
+      "term": "Beneficial Indigenous Microorganisms",
+      "abbreviation": "BIM",
+      "definition": "Cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes and culturing them for garden use.",
+      "related": ["IMO", "KNF"],
+      "category": "microbiology",
+      "articleLink": "/tutorials/BIM-culturing"
+    },
+    "EWC": {
+      "term": "Earthworm Castings",
+      "abbreviation": "EWC",
+      "definition": "The nutrient-rich waste product of earthworms. High-quality EWC provides a foundation of beneficial microbes, plant-available nutrients, and humic substances for living soil systems.",
+      "related": ["vermicompost", "compost", "humus"],
+      "category": "amendments",
+      "articleLink": "/articles/intro-to-probiotics"
+    },
+    "SST": {
+      "term": "Sprouted Seed Tea",
+      "abbreviation": "SST",
+      "definition": "A preparation made from sprouted seeds (typically barley, corn, or alfalfa) blended with water. Provides plant hormones, enzymes, and amino acids. Different seeds offer different benefits.",
+      "related": ["barley", "corn", "alfalfa", "cytokinins", "auxins"],
+      "category": "preparations",
+      "articleLink": "/tutorials/Sprouted-Seed-Tea"
+    },
+    "AACT": {
+      "term": "Actively Aerated Compost Tea",
+      "abbreviation": "AACT",
+      "definition": "Compost tea brewed with continuous oxygen supply (via bubblers or agitation). Aeration promotes aerobic microbial populations beneficial for plant health.",
+      "related": ["compost", "microbes", "brewing"],
+      "category": "preparations",
+      "articleLink": "/tutorials/Modern-Methods"
+    },
+    "EM-1": {
+      "term": "Effective Microorganisms",
+      "abbreviation": "EM-1",
+      "definition": "A trademarked blend of beneficial microorganisms originally developed by Teruo Higa. Modern formulations typically contain lactic acid bacteria, purple bacteria, and yeast.",
+      "related": ["LAB", "PNSB", "KNF"],
+      "category": "microbiology",
+      "articleLink": "/articles/intro-to-probiotics"
+    },
+    "PNSB": {
+      "term": "Purple Non-Sulfur Bacteria",
+      "abbreviation": "PNSB",
+      "definition": "Photosynthetic bacteria (especially Rhodopseudomonas palustris) valuable for bioremediation. PNSB can metabolize organic compounds, prevent stagnant water issues, and help maintain pH balance.",
+      "related": ["EM-1", "photosynthesis"],
+      "category": "microbiology",
+      "articleLink": "/articles/intro-to-probiotics"
+    },
+    "IPM": {
+      "term": "Integrated Pest Management",
+      "abbreviation": "IPM",
+      "definition": "A holistic approach to pest control combining cultural practices, biological controls, and targeted interventions. Emphasizes prevention and ecosystem balance over reactive treatments.",
+      "related": ["SAR", "beneficial insects"],
+      "category": "methodology",
+      "articleLink": "/tutorials/Modern-Methods"
+    },
+    "RuBisCO": {
+      "term": "Ribulose-1,5-bisphosphate carboxylase/oxygenase",
+      "abbreviation": "RuBisCO",
+      "definition": "The enzyme that catalyzes the first step of carbon fixation in the Calvin cycle. RuBisCO cannot distinguish between CO₂ and O₂, which leads to photorespiration in C3 plants under stress.",
+      "related": ["Calvin cycle", "photorespiration", "C3 plants"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "Calvin cycle": {
+      "term": "Calvin Cycle",
+      "abbreviation": null,
+      "definition": "The light-independent reactions of photosynthesis occurring in the chloroplast stroma. Uses ATP and NADPH from light reactions to fix CO₂ into three-carbon sugars (G3P).",
+      "related": ["photosynthesis", "RuBisCO", "G3P"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "photorespiration": {
+      "term": "Photorespiration",
+      "abbreviation": null,
+      "definition": "A wasteful process in C3 plants where RuBisCO binds oxygen instead of CO₂, producing 2-phosphoglycolate. Recovery requires significant ATP and NADH, reducing photosynthetic efficiency.",
+      "related": ["RuBisCO", "C3 plants", "Calvin cycle"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "chlorophyll": {
+      "term": "Chlorophyll",
+      "abbreviation": null,
+      "definition": "The primary photosynthetic pigment in plants, giving leaves their green color. Chlorophyll A drives light reactions; Chlorophyll B is an accessory pigment. Degrades to chlorophyllide during proper curing.",
+      "related": ["photosynthesis", "curing", "pigments"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "phytochrome": {
+      "term": "Phytochrome",
+      "abbreviation": null,
+      "definition": "Light-sensitive proteins that regulate plant responses to light. Pr (phytochrome red) converts to Pfr (phytochrome far-red) upon absorbing red light. Pfr accumulation triggers flowering in short-day plants.",
+      "related": ["photoperiod", "flowering", "Pfr"],
+      "category": "plant-biology",
+      "articleLink": "/articles/day-length-in-veg"
+    },
+    "Pfr": {
+      "term": "Phytochrome Far-Red",
+      "abbreviation": "Pfr",
+      "definition": "The active form of phytochrome that accumulates in darkness. When Pfr levels reach a threshold, flowering is initiated in photoperiod-sensitive plants. Less darkness = less Pr creation = less Pfr.",
+      "related": ["phytochrome", "Pr", "flowering"],
+      "category": "plant-biology",
+      "articleLink": "/articles/day-length-in-veg"
+    },
+    "trichomes": {
+      "term": "Trichomes",
+      "abbreviation": null,
+      "definition": "Hair-like outgrowths from plant epidermis. Glandular trichomes synthesize and store cannabinoids, terpenes, and other secondary metabolites. Trichome density can be influenced by JAR pathway activation.",
+      "related": ["cannabinoids", "terpenes", "JAR"],
+      "category": "plant-biology",
+      "articleLink": "/articles/musings-on-SAR-and-JAR"
+    },
+    "olivetolic acid": {
+      "term": "Olivetolic Acid",
+      "abbreviation": null,
+      "definition": "A key precursor in cannabinoid biosynthesis, formed from hexanoyl-CoA by polyketide synthase. Combines with geranyl pyrophosphate to form cannabigerolic acid (CBGA), the parent cannabinoid.",
+      "related": ["hexanoate", "cannabinoids", "biosynthesis"],
+      "category": "biochemistry",
+      "articleLink": "/articles/impact-of-LAB"
+    },
+    "hexanoate": {
+      "term": "Hexanoic Acid / Hexanoate",
+      "abbreviation": null,
+      "definition": "A short-chain fatty acid (C6) that serves as the precursor for hexanoyl-CoA in cannabinoid biosynthesis. Found naturally in ruminant milk fats and potentially produced during LAB fermentation.",
+      "related": ["olivetolic acid", "LAB", "cannabinoids"],
+      "category": "biochemistry",
+      "articleLink": "/articles/impact-of-LAB"
+    },
+    "C3 plants": {
+      "term": "C3 Plants",
+      "abbreviation": null,
+      "definition": "Plants (including cannabis) that fix CO₂ directly via the Calvin cycle, producing a 3-carbon compound (3-PGA) as the first stable product. Susceptible to photorespiration under hot, dry conditions.",
+      "related": ["Calvin cycle", "photorespiration", "RuBisCO"],
+      "category": "plant-biology",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "stomata": {
+      "term": "Stomata",
+      "abbreviation": null,
+      "definition": "Microscopic pores on leaf surfaces that control gas exchange. CO₂ enters and O₂ exits through stomata. Opening and closing is regulated by guard cells responding to light, humidity, and CO₂ levels.",
+      "related": ["photosynthesis", "transpiration"],
+      "category": "plant-biology",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "carotenoids": {
+      "term": "Carotenoids",
+      "abbreviation": null,
+      "definition": "Accessory pigments that absorb blue-green light and reflect yellow-orange wavelengths. Provide photoprotection and become visible when chlorophyll degrades. Include beta-carotene and lutein.",
+      "related": ["chlorophyll", "pigments", "photoprotection"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    },
+    "anthocyanin": {
+      "term": "Anthocyanin",
+      "abbreviation": null,
+      "definition": "Water-soluble pigments responsible for purple, red, and pink coloration in plants. pH-sensitive and act as photoprotective compounds. High concentrations cause purple coloration in cannabis flowers and leaves.",
+      "related": ["pigments", "pH", "coloration"],
+      "category": "biochemistry",
+      "articleLink": "/articles/photosynthesis-in-cannabis"
+    }
+  },
+  "categories": {
+    "microbiology": {
+      "name": "Microbiology",
+      "description": "Microorganisms and their roles in soil and plant health"
+    },
+    "biochemistry": {
+      "name": "Biochemistry",
+      "description": "Chemical processes within living organisms"
+    },
+    "plant-biology": {
+      "name": "Plant Biology",
+      "description": "Plant structure, function, and responses"
+    },
+    "preparations": {
+      "name": "Preparations",
+      "description": "Homemade inputs and amendments"
+    },
+    "amendments": {
+      "name": "Amendments",
+      "description": "Soil additions and fertilizers"
+    },
+    "methodology": {
+      "name": "Methodology",
+      "description": "Farming systems and approaches"
+    }
+  }
+}

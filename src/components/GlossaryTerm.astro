@@ -1,0 +1,245 @@
+---
+/**
+ * GlossaryTerm.astro
+ * 
+ * A component that wraps a term and displays a popover with its definition on hover.
+ * 
+ * Usage in MDX:
+ *   import GlossaryTerm from '../components/GlossaryTerm.astro';
+ *   
+ *   When using <GlossaryTerm term="LAB" />, the component will:
+ *   - Display "LAB" as underlined text
+ *   - Show a popover with the full definition on hover
+ *   - Link to the full glossary entry on click
+ * 
+ * Or with custom display text:
+ *   <GlossaryTerm term="LAB">lactic acid bacteria</GlossaryTerm>
+ */
+
+import glossaryData from '../assets/glossary.json';
+import type { GlossaryData } from '../types';
+
+interface Props {
+  term: keyof typeof glossaryData.terms; // The term to look up
+  showFull?: boolean; // If true, shows full term name instead of abbreviation
+}
+
+const { term, showFull = false } = Astro.props;
+const baseURL = import.meta.env.BASE_URL || '/';
+
+// Look up the term in our glossary
+const entry = glossaryData.terms[term] as GlossaryData['terms'][keyof GlossaryData['terms']];
+
+// If term not found, just render the text
+if (!entry) {
+  console.warn(`Glossary term not found: ${term}`);
+}
+
+// Determine display text
+const hasSlot = Astro.slots.has('default');
+const displayText = hasSlot ? null : (showFull && entry?.term ? entry.term : term);
+
+// Generate a unique ID for this instance
+const instanceId = `glossary-${term}-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+{entry ? (
+  <span class="glossary-term-wrapper" data-term={term}>
+    <span 
+      class="glossary-term"
+      tabindex="0"
+      role="button"
+      aria-describedby={instanceId}
+    >
+      {hasSlot ? <slot /> : displayText}
+    </span>
+    <span 
+      class="glossary-popover"
+      id={instanceId}
+      role="tooltip"
+    >
+      <span class="popover-header">
+        <span class="popover-title">{entry.term}</span>
+        {entry.abbreviation && (
+          <span class="popover-abbrev">({entry.abbreviation})</span>
+        )}
+      </span>
+      <span class="popover-definition">{entry.definition}</span>
+      {entry.related?.length && (
+        <span class="popover-related">
+          <span class="related-label">Related:</span>
+          {entry.related.map((r: string, i: number) => (
+            <span class="related-term">
+              {r}{i < entry.related!.length - 1 ? ', ' : ''}
+            </span>
+          ))}
+        </span>
+      )}
+      {'articleLink' in entry && entry.articleLink && (
+        <a href={`${baseURL}${entry.articleLink}`} class="popover-link">
+          Read more →
+        </a>
+      )}
+    </span>
+  </span>
+) : (
+  <span class="glossary-term-missing">
+    {hasSlot ? <slot /> : term}
+  </span>
+)}
+
+<style>
+  .glossary-term-wrapper {
+    position: relative;
+    display: inline;
+  }
+
+  .glossary-term {
+    border-bottom: 2px solid var(--glossary-underline, #d97706);
+    cursor: help;
+    transition: border-color 0.2s ease;
+  }
+
+  .glossary-term:hover,
+  .glossary-term:focus {
+    border-color: var(--glossary-underline-hover, #b45309);
+  }
+
+  .glossary-popover {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    max-width: 90vw;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    
+    background: var(--popover-bg, #ffffff);
+    border: 1px solid var(--popover-border, #e5e7eb);
+    border-radius: 8px;
+    box-shadow: 0 10px 40px -5px rgba(0, 0, 0, 0.15);
+    
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+    transform: translateX(-50%) translateY(4px);
+    
+    z-index: 100;
+    
+    /* Text styling */
+    text-align: left;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--popover-text, #374151);
+  }
+
+  /* Arrow */
+  .glossary-popover::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 8px solid transparent;
+    border-top-color: var(--popover-bg, #ffffff);
+  }
+
+  .glossary-popover::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 9px solid transparent;
+    border-top-color: var(--popover-border, #e5e7eb);
+  }
+
+  /* Show on hover/focus */
+  .glossary-term-wrapper:hover .glossary-popover,
+  .glossary-term:focus + .glossary-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .popover-header {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .popover-title {
+    font-weight: 600;
+    color: var(--popover-title, #111827);
+  }
+
+  .popover-abbrev {
+    font-size: 0.75rem;
+    color: var(--popover-muted, #6b7280);
+  }
+
+  .popover-definition {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--popover-text, #374151);
+  }
+
+  .popover-related {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--popover-muted, #6b7280);
+    margin-bottom: 0.5rem;
+  }
+
+  .related-label {
+    font-weight: 500;
+  }
+
+  .popover-link {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: var(--glossary-underline, #d97706);
+    text-decoration: none;
+    margin-top: 0.25rem;
+  }
+
+  .popover-link:hover {
+    text-decoration: underline;
+  }
+
+  .glossary-term-missing {
+    border-bottom: 1px dashed #ef4444;
+  }
+
+  /* Dark theme support */
+  :root.dark-theme .glossary-popover {
+    --popover-bg: #1f2937;
+    --popover-border: #374151;
+    --popover-text: #d1d5db;
+    --popover-title: #f9fafb;
+    --popover-muted: #9ca3af;
+  }
+
+  /* Position adjustments for edge cases */
+  @media (max-width: 400px) {
+    .glossary-popover {
+      width: calc(100vw - 2rem);
+      left: 0;
+      transform: translateX(0);
+    }
+    
+    .glossary-term-wrapper:hover .glossary-popover,
+    .glossary-term:focus + .glossary-popover {
+      transform: translateX(0) translateY(0);
+    }
+    
+    .glossary-popover::after,
+    .glossary-popover::before {
+      left: 2rem;
+    }
+  }
+</style>

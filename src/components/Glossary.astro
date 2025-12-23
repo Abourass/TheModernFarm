@@ -1,0 +1,355 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import glossaryData from "../assets/glossary.json";
+import { SITE_TITLE } from "../consts";
+
+// Group terms by category
+const termsByCategory: Record<string, Array<{key: string, entry: any}>> = {};
+
+for (const [key, entry] of Object.entries(glossaryData.terms)) {
+  const category = (entry as any).category || 'uncategorized';
+  if (!termsByCategory[category]) {
+    termsByCategory[category] = [];
+  }
+  termsByCategory[category].push({ key, entry });
+}
+
+// Sort terms alphabetically within each category
+for (const category of Object.keys(termsByCategory)) {
+  termsByCategory[category].sort((a, b) => 
+    (a.entry.term || a.key).localeCompare(b.entry.term || b.key)
+  );
+}
+
+// Get category info
+const categories = glossaryData.categories as Record<string, {name: string, description: string}>;
+
+// Order categories
+const categoryOrder = ['plant-biology', 'biochemistry', 'microbiology', 'preparations', 'amendments', 'methodology'];
+const sortedCategories = categoryOrder.filter(c => termsByCategory[c]);
+
+const baseURL = import.meta.env.BASE_URL || '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead 
+      title={`Glossary | ${SITE_TITLE}`} 
+      description="A comprehensive glossary of terms used in probiotic gardening, soil science, and plant biology."
+    />
+    <style>
+      main {
+        width: 960px;
+        max-width: calc(100% - 2em);
+        margin: 0 auto;
+        padding: 3em 1em;
+      }
+
+      .page-header {
+        margin-bottom: 3rem;
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 0.5rem;
+      }
+
+      .page-description {
+        color: rgb(var(--gray));
+        max-width: 600px;
+      }
+
+      .category-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 3rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgb(var(--gray-light));
+      }
+
+      .category-link {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        background: rgb(var(--gray-light));
+        border-radius: 9999px;
+        text-decoration: none;
+        color: rgb(var(--gray-dark));
+        transition: all 0.2s ease;
+      }
+
+      .category-link:hover {
+        background: var(--accent);
+        color: white;
+      }
+
+      .category-section {
+        margin-bottom: 3rem;
+      }
+
+      .category-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent);
+      }
+
+      .category-title {
+        font-size: 1.5rem;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .category-description {
+        font-size: 0.875rem;
+        color: rgb(var(--gray));
+        margin: 0.25rem 0 0 0;
+      }
+
+      .terms-grid {
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      .term-card {
+        padding: 1.5rem;
+        background: white;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 8px;
+        transition: box-shadow 0.2s ease;
+      }
+
+      :root.dark-theme .term-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .term-card:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .term-header {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .term-name {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .term-abbrev {
+        font-size: 0.875rem;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .term-definition {
+        margin: 0 0 1rem 0;
+        line-height: 1.7;
+      }
+
+      .term-related {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .related-tag {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        background: rgb(var(--gray-light));
+        border-radius: 9999px;
+        color: rgb(var(--gray-dark));
+      }
+
+      :root.dark-theme .related-tag {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .term-link {
+        font-size: 0.875rem;
+        color: var(--accent);
+      }
+
+      .search-container {
+        margin-bottom: 2rem;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 400px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 8px;
+        background: white;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      :root.dark-theme .search-input {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: inherit;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(38, 91, 112, 0.1);
+      }
+
+      .search-input::placeholder {
+        color: rgb(var(--gray));
+      }
+
+      @media (max-width: 720px) {
+        .page-title {
+          font-size: 2rem;
+        }
+
+        .category-nav {
+          gap: 0.375rem;
+        }
+
+        .category-link {
+          font-size: 0.75rem;
+          padding: 0.375rem 0.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="page-header">
+        <h1 class="page-title">Glossary</h1>
+        <p class="page-description">
+          A reference guide to the terminology used throughout our articles and tutorials. 
+          Terms are organized by category and cross-referenced.
+        </p>
+      </div>
+
+      <div class="search-container">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="Search terms..."
+          id="glossary-search"
+        />
+      </div>
+
+      <nav class="category-nav">
+        {sortedCategories.map(categoryKey => (
+          <a href={`#${categoryKey}`} class="category-link">
+            {categories[categoryKey]?.name || categoryKey}
+          </a>
+        ))}
+      </nav>
+
+      <div id="glossary-content">
+        {sortedCategories.map(categoryKey => (
+          <section class="category-section" id={categoryKey} data-category={categoryKey}>
+            <header class="category-header">
+              <h2 class="category-title">{categories[categoryKey]?.name || categoryKey}</h2>
+              {categories[categoryKey]?.description && (
+                <p class="category-description">{categories[categoryKey].description}</p>
+              )}
+            </header>
+            
+            <div class="terms-grid">
+              {termsByCategory[categoryKey].map(({ key, entry }) => (
+                <article class="term-card" data-term={key.toLowerCase()} data-fullterm={(entry.term || '').toLowerCase()}>
+                  <header class="term-header">
+                    <h3 class="term-name" id={`term-${key}`}>{entry.term || key}</h3>
+                    {entry.abbreviation && (
+                      <span class="term-abbrev">{entry.abbreviation}</span>
+                    )}
+                  </header>
+                  
+                  <p class="term-definition">{entry.definition}</p>
+                  
+                  {entry.related && entry.related.length > 0 && (
+                    <div class="term-related">
+                      {entry.related.map((related: string) => (
+                        <span class="related-tag">{related}</span>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {entry.articleLink && (
+                    <a href={`${baseURL}${entry.articleLink}`} class="term-link">
+                      Read more →
+                    </a>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+    </main>
+    <Footer />
+
+    <script>
+      // Simple search functionality
+      const searchInput = document.getElementById('glossary-search') as HTMLInputElement;
+      const termCards = document.querySelectorAll('.term-card');
+      const categorySections = document.querySelectorAll('.category-section');
+
+      searchInput?.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        
+        if (!query) {
+          // Show all
+          termCards.forEach(card => {
+            (card as HTMLElement).style.display = 'block';
+          });
+          categorySections.forEach(section => {
+            (section as HTMLElement).style.display = 'block';
+          });
+          return;
+        }
+
+        // Filter terms
+        termCards.forEach(card => {
+          const term = card.getAttribute('data-term') || '';
+          const fullTerm = card.getAttribute('data-fullterm') || '';
+          const definition = card.querySelector('.term-definition')?.textContent?.toLowerCase() || '';
+          
+          const matches = term.includes(query) || fullTerm.includes(query) || definition.includes(query);
+          (card as HTMLElement).style.display = matches ? 'block' : 'none';
+        });
+
+        // Hide empty categories
+        categorySections.forEach(section => {
+          const visibleCards = section.querySelectorAll('.term-card[style="display: block"], .term-card:not([style])');
+          let hasVisible = false;
+          visibleCards.forEach(card => {
+            if ((card as HTMLElement).style.display !== 'none') {
+              hasVisible = true;
+            }
+          });
+          
+          // Check if any cards are visible
+          const cards = section.querySelectorAll('.term-card');
+          let anyVisible = false;
+          cards.forEach(card => {
+            if ((card as HTMLElement).style.display !== 'none') {
+              anyVisible = true;
+            }
+          });
+          
+          (section as HTMLElement).style.display = anyVisible ? 'block' : 'none';
+        });
+      });
+    </script>
+  </body>
+</html>
