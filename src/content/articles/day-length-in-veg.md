@@ -3,6 +3,9 @@ title: 'Day Length in Veg'
 description: 'Understanding the optimal light cycle for cannabis vegetative growth'
 pubDate: 'Aug 22 2025'
 heroImage: '../../assets/blog-placeholder-3.jpg'
+category: 'Plant Biology'
+difficulty: 'intermediate'
+readTime: '6 min'
 ---
 
 If you've ever opened a so called "grow bible", you've likely come across some debates on the merits of 18hr of light vs 24hrs for vegging your plants. Common claims include "18 hours is more natural," "plants require darkness for certain metabolic processes," or simply "it saves electricity." While these explanations seem intuitive and practical, they oversimplify the complex plant biology at work. This article examines the science behind cannabis photoperiods to reveal why these conventional assumptions fall short and what actually determines optimal vegetative growth.

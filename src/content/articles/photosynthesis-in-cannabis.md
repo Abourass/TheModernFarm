@@ -3,6 +3,9 @@ title: 'Photosynthesis in Cannabis'
 description: 'Exploring the role of photosynthesis in cannabis growth and development'
 pubDate: 'Aug 21 2025'
 heroImage: '../../assets/blog-placeholder-3.jpg'
+category: 'Plant Biology'
+difficulty: 'advanced'
+readTime: '18 min'
 ---
 
 # Photosynthesis and Cannabis

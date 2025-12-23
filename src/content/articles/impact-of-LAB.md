@@ -3,6 +3,9 @@ title: 'Hypothesis: The Impact of LAB on Cannabis'
 description: 'Why Cannabis Grown with the Addition of LAB Might Produce a Superior High'
 pubDate: 'Jul 15 2022'
 heroImage: '../../assets/blog-placeholder-4.jpg'
+category: 'Microbiology'
+difficulty: 'advanced'
+readTime: '12 min'
 ---
 
 As an organic gardener, and a guy who generally can’t resist reading into why things happen, I’d started using LABS (Lactic Acid Bacteria Serum) in the garden as soon I learned of its benefits. When greenhouse tomatoes are grown with the addition of a blend of humic fertilizer, produced from vermicompost, and bio-fertilizer, containing Lactobacillus casei, Lactobacillus lactis, Phodopseudomonas palistris, Sаccharomices cerevisiae that the total tomato yield was increased by 19 and 21% after soil application and by 13 and 14% after foliar application of bio-fertilizer and humic fertilizer, respectively.[^1] Lactic Bacteria have uses beyond just that of a bio-fertilizer though, it can even exhibit antifungal activity.[^2] I’d first learned about the benefits of lactic bacteria though, through research into EM1 (Effective Microorganisms). ‘The Concepts and Theories of Effective Microorganisms‘ by T. Higa and G. N. Wididana, introduced the concept of Effective Microorganisms (EM / EM1), which described an inoculant of multiple species of beneficial microorganisms, meant to provide a wide variety of uses, including ‘suppression of plant pathogens and diseases, conservation of energy in plants, solubilization of soil minerals, and soil microbial-ecological balance, photosynthetic efficiency, and biological nitrogen fixation’.[^3] The blend of microorganisms originally described were a mix of lactic acid bacteria, purple bacteria, yeast, actinomycetes, and fermenting fungi . T. Higa went on to create the brand EM™ Technology, and later revised his mixture, to only include lactic acid bacteria, purple bacteria, and yeast.

@@ -3,6 +3,9 @@ title: 'Intro to Probiotic Gardening'
 description: "A beginner's guide to understanding and implementing probiotic gardening techniques."
 pubDate: 'Aug 22 2025'
 heroImage: '../../assets/moonwalk.webp'
+category: 'Fundamentals'
+difficulty: 'beginner'
+readTime: '8 min'
 ---
 
 Diving into probiotic gardening can feel like learning a new language at first. Whether you know it as probiotic, bio-intensive, or no-till growing, the techniques and terminology can seem overwhelming; especially when you're cultivating plants for your own medicine or depending on your garden for your livelihood. That's why I've created this straightforward introduction to simplify your journey. Consider this your friendly guide to getting started, and remember, if you have questions or need personalized advice, I'm just a message away on Discord.

@@ -3,6 +3,9 @@ title: 'Rock Dust & Remineralization'
 description: 'A guide to different types of rock dust for remineralizing your garden soil'
 pubDate: 'Aug 19 2025'
 heroImage: '../../assets/blog-placeholder-3.jpg'
+category: 'Amendments'
+difficulty: 'intermediate'
+readTime: '10 min'
 ---
 
 *New to Rock dust? Here's a brief primer.*

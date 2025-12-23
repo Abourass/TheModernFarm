@@ -13,6 +13,10 @@ const articles = defineCollection({
             pubDate: z.coerce.date(),
             updatedDate: z.coerce.date().optional(),
             heroImage: image().optional(),
+            // Article-specific metadata
+            category: z.string().optional(),
+            difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional(),
+            readTime: z.string().optional(),
         }),
 });
 

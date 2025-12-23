@@ -5,6 +5,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import GlossaryTerm from "../components/GlossaryTerm.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 // Get recent articles and tutorials
@@ -15,6 +16,9 @@ const articles = (await getCollection("articles"))
 const tutorials = (await getCollection("tutorials"))
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 	.slice(0, 3); // Get only the 3 most recent tutorials
+
+// pH data for fermentation timeline visualization
+const phData = [6.2, 5.8, 5.1, 4.6, 4.2, 3.9, 3.6, 3.4, 3.3, 3.2, 3.2, 3.2, 3.2, 3.2];
 ---
 
 <!doctype html>
@@ -77,6 +81,48 @@ const tutorials = (await getCollection("tutorials"))
 				position: relative;
 				width: 280px;
 				height: 280px;
+			}
+
+			.diagram-svg {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			.diagram-label {
+				position: absolute;
+				font-size: 0.65rem;
+				text-transform: uppercase;
+				letter-spacing: 0.1em;
+				color: rgb(var(--gray));
+				font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+			}
+
+			.diagram-label-top {
+				top: 0.25rem;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
+			.diagram-label-bottom {
+				bottom: 0.25rem;
+				left: 50%;
+				transform: translateX(-50%);
+			}
+
+			.diagram-label-left {
+				left: 0.25rem;
+				top: 50%;
+				transform: translateY(-50%) rotate(-90deg);
+				transform-origin: center;
+			}
+
+			.diagram-label-right {
+				right: 0.25rem;
+				top: 50%;
+				transform: translateY(-50%) rotate(90deg);
+				transform-origin: center;
 			}
 
 			.orbit {
@@ -161,6 +207,196 @@ const tutorials = (await getCollection("tutorials"))
 				height: 1px;
 				background: linear-gradient(to right, transparent, rgb(var(--gray-light)), transparent);
 				margin: 0 0 4rem 0;
+			}
+
+			/* Featured Article Section */
+			.featured-section {
+				display: grid;
+				grid-template-columns: 4fr 8fr;
+				gap: 2rem;
+				padding: 0 0 4rem 0;
+			}
+
+			.featured-label {
+				font-size: 0.7rem;
+				text-transform: uppercase;
+				letter-spacing: 0.2em;
+				color: rgb(var(--gray));
+				margin-bottom: 0.5rem;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.featured-title {
+				font-size: 1.75rem;
+				font-weight: 300;
+				margin-bottom: 1rem;
+			}
+
+			.featured-description {
+				font-size: 1rem;
+				color: rgb(var(--gray));
+				line-height: 1.7;
+				margin-bottom: 1.5rem;
+			}
+
+			.featured-link {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.875rem;
+				color: var(--accent);
+				text-decoration: none;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				transition: color 0.2s ease;
+			}
+
+			.featured-link:hover {
+				color: var(--accent-dark);
+			}
+
+			.featured-link svg {
+				width: 1rem;
+				height: 1rem;
+				transition: transform 0.2s ease;
+			}
+
+			.featured-link:hover svg {
+				transform: translateX(4px);
+			}
+
+			/* pH Chart Visualization */
+			.chart-container {
+				background: white;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				padding: 2rem;
+				position: relative;
+			}
+
+			:root.dark-theme .chart-container {
+				background: rgba(255, 255, 255, 0.03);
+				border-color: rgba(255, 255, 255, 0.08);
+			}
+
+			.chart-label {
+				position: absolute;
+				top: 1rem;
+				right: 1rem;
+				font-size: 0.75rem;
+				color: rgb(var(--gray));
+				font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+			}
+
+			.chart-bars {
+				display: flex;
+				align-items: flex-end;
+				gap: 0.25rem;
+				height: 8rem;
+				margin-top: 1.5rem;
+				margin-bottom: 1rem;
+			}
+
+			.chart-bar {
+				flex: 1;
+				border-radius: 2px 2px 0 0;
+				transition: opacity 0.2s ease;
+			}
+
+			.chart-bar:hover {
+				opacity: 0.8;
+			}
+
+			.chart-bar.unstable {
+				background: #dc2626;
+			}
+
+			.chart-bar.transitional {
+				background: #f59e0b;
+			}
+
+			.chart-bar.stable {
+				background: #16a34a;
+			}
+
+			.chart-timeline {
+				display: flex;
+				justify-content: space-between;
+				font-size: 0.75rem;
+				color: rgb(var(--gray));
+				border-top: 1px solid rgb(var(--gray-light));
+				padding-top: 0.5rem;
+				font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+			}
+
+			.chart-legend {
+				display: flex;
+				gap: 1.5rem;
+				margin-top: 1rem;
+				font-size: 0.75rem;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.legend-item {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				color: rgb(var(--gray));
+			}
+
+			.legend-dot {
+				width: 0.75rem;
+				height: 0.75rem;
+				border-radius: 2px;
+			}
+
+			.legend-dot.unstable {
+				background: #dc2626;
+			}
+
+			.legend-dot.transitional {
+				background: #f59e0b;
+			}
+
+			.legend-dot.stable {
+				background: #16a34a;
+			}
+
+			/* Glossary Demo Section */
+			.glossary-section {
+				background: white;
+				border-top: 1px solid rgb(var(--gray-light));
+				border-bottom: 1px solid rgb(var(--gray-light));
+				margin: 0 calc(-50vw + 50%);
+				padding: 4rem calc(50vw - 50%);
+			}
+
+			:root.dark-theme .glossary-section {
+				background: rgba(255, 255, 255, 0.02);
+				border-color: rgba(255, 255, 255, 0.08);
+			}
+
+			.glossary-grid {
+				display: grid;
+				grid-template-columns: 4fr 8fr;
+				gap: 2rem;
+				max-width: 960px;
+				margin: 0 auto;
+			}
+
+			.glossary-demo-content {
+				background: rgb(var(--gray-light));
+				border-radius: 8px;
+				padding: 1.5rem;
+			}
+
+			:root.dark-theme .glossary-demo-content {
+				background: rgba(255, 255, 255, 0.05);
+			}
+
+			.glossary-demo-content p {
+				font-size: 1.125rem;
+				line-height: 1.8;
+				margin: 0;
 			}
 
 			/* Section styling */
@@ -250,6 +486,66 @@ const tutorials = (await getCollection("tutorials"))
 				font-size: 0.875rem;
 			}
 
+			/* Card metadata */
+			.card-category {
+				font-size: 0.7rem;
+				text-transform: uppercase;
+				letter-spacing: 0.15em;
+				color: var(--accent);
+				margin: 0 0 0.25rem 0;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.card-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				margin-top: 0.5rem;
+			}
+
+			.difficulty-badge {
+				font-size: 0.65rem;
+				padding: 0.2rem 0.5rem;
+				border-radius: 4px;
+				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			}
+
+			.difficulty-badge.beginner {
+				background: #dcfce7;
+				color: #166534;
+			}
+
+			.difficulty-badge.intermediate {
+				background: #fef3c7;
+				color: #92400e;
+			}
+
+			.difficulty-badge.advanced {
+				background: rgb(var(--gray-light));
+				color: rgb(var(--gray-dark));
+			}
+
+			:root.dark-theme .difficulty-badge.beginner {
+				background: rgba(22, 163, 74, 0.2);
+				color: #86efac;
+			}
+
+			:root.dark-theme .difficulty-badge.intermediate {
+				background: rgba(245, 158, 11, 0.2);
+				color: #fcd34d;
+			}
+
+			:root.dark-theme .difficulty-badge.advanced {
+				background: rgba(255, 255, 255, 0.1);
+				color: rgb(var(--gray));
+			}
+
+			.read-time {
+				font-size: 0.75rem;
+				color: rgb(var(--gray));
+				font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+			}
+
 			ul li a:hover .title {
 				color: var(--accent);
 			}
@@ -274,6 +570,19 @@ const tutorials = (await getCollection("tutorials"))
 					font-size: 2rem;
 				}
 
+				.featured-section {
+					grid-template-columns: 1fr;
+				}
+
+				.glossary-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.chart-legend {
+					flex-wrap: wrap;
+					gap: 0.75rem;
+				}
+
 				ul {
 					grid-template-columns: 1fr;
 					gap: 1.5rem;
@@ -294,6 +603,19 @@ const tutorials = (await getCollection("tutorials"))
 				</div>
 				<div class="hero-visual">
 					<div class="soil-web-diagram">
+						<!-- SVG crosshair lines -->
+						<svg class="diagram-svg" viewBox="0 0 280 280">
+							<line x1="140" y1="0" x2="140" y2="280" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
+							<line x1="0" y1="140" x2="280" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
+							<line x1="40" y1="40" x2="240" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
+							<line x1="240" y1="40" x2="40" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
+						</svg>
+						<!-- Labels -->
+						<span class="diagram-label diagram-label-top">Atmosphere</span>
+						<span class="diagram-label diagram-label-bottom">Substrate</span>
+						<span class="diagram-label diagram-label-left">Microbiome</span>
+						<span class="diagram-label diagram-label-right">Plant</span>
+						<!-- Orbits -->
 						<div class="orbit orbit-1"></div>
 						<div class="orbit orbit-2"></div>
 						<div class="orbit orbit-3"></div>
@@ -302,6 +624,59 @@ const tutorials = (await getCollection("tutorials"))
 						<div class="node node-2"></div>
 						<div class="node node-3"></div>
 						<div class="node node-4"></div>
+					</div>
+				</div>
+			</section>
+
+			<div class="section-divider"></div>
+
+			<!-- Featured Article Section -->
+			<section class="featured-section">
+				<div class="featured-info">
+					<p class="featured-label">Featured Research</p>
+					<h2 class="featured-title">Fermented Plant Extracts</h2>
+					<p class="featured-description">
+						What actually happens during FPE fermentation? We trace the microbial 
+						succession, biochemical transformations, and potential defense pathway 
+						activation—separating science from tradition.
+					</p>
+					<a href={`${import.meta.env.BASE_URL}/articles/impact-of-LAB/`} class="featured-link">
+						<span>Read the full analysis</span>
+						<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+						</svg>
+					</a>
+				</div>
+				<div class="featured-chart">
+					<div class="chart-container">
+						<span class="chart-label">Fig. 1 — Fermentation Timeline</span>
+						<div class="chart-bars">
+							{phData.map((ph) => (
+								<div 
+									class={`chart-bar ${ph > 4.6 ? 'unstable' : ph > 4.0 ? 'transitional' : 'stable'}`}
+									style={`height: ${(ph / 7) * 100}%`}
+								/>
+							))}
+						</div>
+						<div class="chart-timeline">
+							<span>Day 0</span>
+							<span>Day 7</span>
+							<span>Day 14</span>
+						</div>
+						<div class="chart-legend">
+							<div class="legend-item">
+								<div class="legend-dot unstable"></div>
+								<span>pH &gt; 4.6 (unstable)</span>
+							</div>
+							<div class="legend-item">
+								<div class="legend-dot transitional"></div>
+								<span>pH 4.0–4.6 (transitional)</span>
+							</div>
+							<div class="legend-item">
+								<div class="legend-dot stable"></div>
+								<span>pH &lt; 4.0 (stable)</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -329,10 +704,20 @@ const tutorials = (await getCollection("tutorials"))
 										/>
 									)}
 									<div class="card-content">
+										{post.data.category && (
+											<p class="card-category">{post.data.category}</p>
+										)}
 										<h4 class="title">{post.data.title}</h4>
-										<p class="date">
-											<FormattedDate date={post.data.pubDate} />
-										</p>
+										<div class="card-meta">
+											{post.data.difficulty && (
+												<span class={`difficulty-badge ${post.data.difficulty}`}>
+													{post.data.difficulty.charAt(0).toUpperCase() + post.data.difficulty.slice(1)}
+												</span>
+											)}
+											{post.data.readTime && (
+												<span class="read-time">{post.data.readTime} read</span>
+											)}
+										</div>
 									</div>
 								</a>
 							</li>
@@ -363,9 +748,16 @@ const tutorials = (await getCollection("tutorials"))
 									)}
 									<div class="card-content">
 										<h4 class="title">{post.data.title}</h4>
-										<p class="date">
-											<FormattedDate date={post.data.pubDate} />
-										</p>
+										<div class="card-meta">
+											{post.data.difficulty && (
+												<span class={`difficulty-badge ${post.data.difficulty}`}>
+													{post.data.difficulty.charAt(0).toUpperCase() + post.data.difficulty.slice(1)}
+												</span>
+											)}
+											{post.data.timeToComplete && (
+												<span class="read-time">{post.data.timeToComplete}</span>
+											)}
+										</div>
 									</div>
 								</a>
 							</li>
@@ -374,6 +766,30 @@ const tutorials = (await getCollection("tutorials"))
 				</ul>
 			</section>
 		</main>
+
+		<!-- Glossary Demo Section -->
+		<section class="glossary-section">
+			<div class="glossary-grid">
+				<div class="glossary-info">
+					<p class="featured-label">Interactive Glossary</p>
+					<h2 class="featured-title">Hover to learn</h2>
+					<p class="featured-description">
+						Technical terms throughout the site are linked to our glossary. 
+						Hover over highlighted terms for quick definitions, or click 
+						to explore the full entry.
+					</p>
+				</div>
+				<div class="glossary-demo-content">
+					<p>
+						When cultivating with living soil methods, understanding the role of
+						<GlossaryTerm term="LAB" /> is essential. These microorganisms interact with plant
+						<GlossaryTerm term="SAR" /> pathways, potentially enhancing both defense responses and secondary 
+						metabolite production through <GlossaryTerm term="FPE" /> applications.
+					</p>
+				</div>
+			</div>
+		</section>
+
 		<Footer />
 	</body>
 </html>
