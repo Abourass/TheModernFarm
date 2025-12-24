@@ -8,6 +8,8 @@ difficulty: 'advanced'
 readTime: '18 min'
 ---
 
+import GlossaryTerm from '../../components/GlossaryTerm.astro';
+
 # Photosynthesis and Cannabis
 
 Photosynthesis is the basis for all plant life, yet most gardening guides only mention it in passing, if at all. If you're unfamiliar, photosynthesis is the process plants (as well as some bacteria, algae, prokaryotes, and some *protist*) use to turn energy from sunlight, in combination with water, and CO₂ into essential sugars (and as a byproduct we get oxygen). These sugars (carbohydrates) are essential for the plants survival, as they provide fuel for the cells (energy), in addition to providing much needed carbon (This is what we are talking about when you hear carbon fixation mentioned).  It's worth mentioning, biosynthesis of cannabinoids and related compounds are incredibly energy intensive on a molecular level. The amount of cellular energy required to biosynthesize terpenoid molecules has been calculated to be up to three times greater than that required to synthesize an equivalent weight of sugars(**¹**). If this all seems a bit boring, don't worry! This topic is not without its rewards!
@@ -20,20 +22,20 @@ Photosynthesis is the basis for all plant life, yet most gardening guides only m
 - [Understanding Photosynthetic Pigments](#Pigments)
 - [Intro to the Biochemistry of Photosynthesis](#IntBio)
 - [The Light Dependent Reactions](#Light)
-- [The Calvin Cycle](#Calvin)
-- [Photorespiration in C3 Plants](#Photorespiration)
+- [The <GlossaryTerm term="Calvin cycle">Calvin Cycle</GlossaryTerm>](#Calvin)
+- [<GlossaryTerm term="photorespiration">Photorespiration</GlossaryTerm> in <GlossaryTerm term="C3 plants">C3 Plants</GlossaryTerm>](#Photorespiration)
 
 ### <a id="Intro"></a>**Intro to Photosynthesis**
 
-Photosynthesis takes place inside an *organelle*, called **chloroplast**. Chloroplast is found in any green plant tissue, like stems, and buds, though it is most abundant in the leaves. On a cellular level, chloroplast is contained within the **mesophyll cell**, the tissue in the interior of a leaf. Generally a mesophyll cell will contain about 30-40 chloroplast, each only about 2-3 µm by 4-7 µm. Carbon Dioxide (CO₂) enters the leaf via small pores on the surface of the leaf called the **stomata** (or stoma when you are referring to a single pore) and diffuse into the **mesophyll layer** while oxygen (O₂) diffuses out.
+Photosynthesis takes place inside an *organelle*, called **chloroplast**. Chloroplast is found in any green plant tissue, like stems, and buds, though it is most abundant in the leaves. On a cellular level, chloroplast is contained within the **mesophyll cell**, the tissue in the interior of a leaf. Generally a mesophyll cell will contain about 30-40 chloroplast, each only about 2-3 µm by 4-7 µm. Carbon Dioxide (CO₂) enters the leaf via small pores on the surface of the leaf called the **<GlossaryTerm term="stomata" />** (or stoma when you are referring to a single pore) and diffuse into the **mesophyll layer** while oxygen (O₂) diffuses out.
 
 ![A cross section of the organelle chloroplast – Photo courtesy of Georgia State University](https://themodern.farm/wp-content/uploads/2017/11/C3cycle.gif)
 
-Inside the chloroplast (passed its two membranes) is the fluid filled **stroma**. Floating around this fluid are disc-like structures called **thylakoids**, that are arranged into stacks like pancakes, which are collectively referred to as **grana**. Within the membranes of the thylakoid is where we find **chlorophyll**, the photosynthetic pigment that gives leaves their characteristic green color, and the vary same pigment that drives photosynthesis. Inside the thylakoid, passed its membranes, is the **thylakoid space**, also called the **lumen**. While you don't really need to memorise everything just mentioned, it's helpful to look back at this as we go through the biochemistry so you understand where it is happening.
+Inside the chloroplast (passed its two membranes) is the fluid filled **stroma**. Floating around this fluid are disc-like structures called **thylakoids**, that are arranged into stacks like pancakes, which are collectively referred to as **grana**. Within the membranes of the thylakoid is where we find **<GlossaryTerm term="chlorophyll" />**, the photosynthetic pigment that gives leaves their characteristic green color, and the vary same pigment that drives photosynthesis. Inside the thylakoid, passed its membranes, is the **thylakoid space**, also called the **lumen**. While you don't really need to memorise everything just mentioned, it's helpful to look back at this as we go through the biochemistry so you understand where it is happening.
 
 ### <a id="Pigments"></a>**Understanding Photosynthetic Pigments**
 
-Above I mentioned where we find chlorophyll, and that it's a photosynthetic pigment, but you may be wondering what that really means. When light, in the form of photons, interacts with matter it can be reflected, transmitted, or absorbed. When a substance absorbs visible light, its called a **pigment**. Chlorophyll actually is a class of pigments, of which the two most abundant forms are **Chlorophyll A**, which drives the light-dependant reactions, and **Chlorophyll B**, an accessory pigment. (Chlorophyll C and Chlorophyll D also exist). In addition to Chlorophyll B, you have other accessory pigments, such as **carotenoids**, and **anthocyanin** (there's actually a few others like anthoxanthin, however I can't find anything suggesting they occur in cannabis.).
+Above I mentioned where we find chlorophyll, and that it's a photosynthetic pigment, but you may be wondering what that really means. When light, in the form of photons, interacts with matter it can be reflected, transmitted, or absorbed. When a substance absorbs visible light, its called a **pigment**. Chlorophyll actually is a class of pigments, of which the two most abundant forms are **Chlorophyll A**, which drives the light-dependant reactions, and **Chlorophyll B**, an accessory pigment. (Chlorophyll C and Chlorophyll D also exist). In addition to Chlorophyll B, you have other accessory pigments, such as **<GlossaryTerm term="carotenoids" />**, and **<GlossaryTerm term="anthocyanin" />** (there's actually a few others like anthoxanthin, however I can't find anything suggesting they occur in cannabis.).
 
 When we look at a leaf, and it appears green it is because this spectrum is reflected by pigment it contained. That might lead you to ask, what about when leaves or even flower (bud) is purple? This is simply the result of high concentrations anthocyanin, the same water soluble accessory pigment found in purple cabbage. You may have done an experiment in high school with purple cabbage to show pH. which happened because anthocyanin is both water soluble, as well as incredibly pH sensitive. We see this as purple as it is the spectrum of light that was reflected, and not absorbed. While anthocyanin appears as purples, reds, and pinks, conversely carotenoids absorbs violet to blue-green light and instead reflects (and thus appears to us as) shades of yellow and orange. Think about the color change we see in leaves from spring to fall on the trees all around us. In fall chlorophyll undergoes degradation, eventually to the point of not being expressed. The residual pigments, carotenoids, anthocyanin, etc, are what's left, and thus what we see light reflected from.
 
@@ -108,7 +110,7 @@ ATP + NADPH + CO2 -> Calvin Cycle* -> PGAL aka G3P aka Phosphoglyceraldehyde
 
 These reactions have been renamed over the last few decades, and for good reason. Originally coined 'dark reactions', this name has been completely dropped in modern biology, as it incorrectly implied the reactions occur at night, or in the dark. Instead, scientist and teachers alike now refer to this as either the light-independent reactions or more commonly, The Calvin Cycle ( or sometimes the Calvin-Benson-Bassham cycle when making an effort to include all the scientist involved in its discovery).
 
-The Calvin Cycle is mostly driven by the enzyme RuBisCo, aka ribulose-1,5-bisphosphate carboxylase/oxygenase.
+The Calvin Cycle is mostly driven by the enzyme <GlossaryTerm term="RuBisCO">RuBisCo</GlossaryTerm>, aka ribulose-1,5-bisphosphate carboxylase/oxygenase.
 
 #### **Fixation**
 
