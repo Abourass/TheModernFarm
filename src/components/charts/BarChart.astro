@@ -102,6 +102,9 @@ const tickCount = 5;
 const tickStep = range / (tickCount - 1);
 const yTicks = Array.from({ length: tickCount }, (_, i) => yMin + tickStep * i);
 
+// Determine if we have negative values (need a zero line)
+const hasNegativeValues = yMin < 0;
+
 // Calculate bar height percentage
 function getBarHeight(value: number): number {
   return ((value - Math.min(yMin, 0)) / range) * 100;
@@ -109,14 +112,24 @@ function getBarHeight(value: number): number {
 
 // Calculate bar position for negative values
 function getBarBottom(value: number): number {
-  if (value >= 0) {
-    return ((0 - yMin) / range) * 100;
+  if (hasNegativeValues) {
+    // When we have negative values, bars start from the zero line
+    if (value >= 0) {
+      return ((0 - yMin) / range) * 100;
+    }
+    return ((value - yMin) / range) * 100;
   }
-  return ((value - yMin) / range) * 100;
+  // When all values are positive, bars start from the bottom (yMin)
+  return 0;
 }
 
 function getBarActualHeight(value: number): number {
-  return (Math.abs(value) / range) * 100;
+  if (hasNegativeValues) {
+    // With negative values, height is the absolute value portion of the range
+    return (Math.abs(value) / range) * 100;
+  }
+  // Without negative values, height is from yMin to value
+  return ((value - yMin) / range) * 100;
 }
 
 const chartId = `bar-chart-${Math.random().toString(36).substr(2, 9)}`;
@@ -334,7 +347,7 @@ const chartId = `bar-chart-${Math.random().toString(36).substr(2, 9)}`;
     inset: 0;
     display: flex;
     justify-content: space-around;
-    align-items: flex-end;
+    align-items: stretch;
     padding: 0 1rem;
   }
 
@@ -345,13 +358,14 @@ const chartId = `bar-chart-${Math.random().toString(36).substr(2, 9)}`;
     gap: 0.5rem;
     flex: 1;
     max-width: 120px;
+    height: 100%;
   }
 
   .bar-group-bars {
     display: flex;
     gap: 4px;
     align-items: flex-end;
-    height: 100%;
+    flex: 1;
     position: relative;
     width: 100%;
     justify-content: center;
@@ -364,10 +378,6 @@ const chartId = `bar-chart-${Math.random().toString(36).substr(2, 9)}`;
     border-radius: 4px 4px 0 0;
     transition: opacity 0.2s ease, transform 0.2s ease;
     cursor: default;
-  }
-
-  .bar-group-bars .bar {
-    position: relative;
   }
 
   .bar:hover {
