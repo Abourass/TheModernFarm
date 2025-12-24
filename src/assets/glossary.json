@@ -71,6 +71,13 @@
       "category": "amendments",
       "articleLink": "/articles/intro-to-probiotics"
     },
+    "CEC": {
+      "term": "Cation Exchange Capacity",
+      "abbreviation": "CEC",
+      "definition": "A measure of a soil's ability to hold and exchange positively charged nutrient ions (cations) like calcium, magnesium, and potassium. Higher CEC means greater nutrient retention. Clay and humus have high CEC; sandy soils have low CEC.",
+      "related": ["amendments", "humus", "clay"],
+      "category": "amendments"
+    },
     "SST": {
       "term": "Sprouted Seed Tea",
       "abbreviation": "SST",
