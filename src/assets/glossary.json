@@ -6,7 +6,7 @@
       "definition": "Beneficial microorganisms that ferment sugars into lactic acid. Key species include Lactobacillus plantarum and L. casei. LAB lower pH, outcompete pathogens, and may produce plant-beneficial metabolites.",
       "related": ["LABS", "EM-1", "FPE", "fermentation"],
       "category": "microbiology",
-      "articleLink": "/articles/impact-of-LAB"
+      "articleLink": "/articles/impact-of-lab"
     },
     "LABS": {
       "term": "Lactic Acid Bacteria Serum",
@@ -14,7 +14,7 @@
       "definition": "A cultured solution of lactic acid bacteria, typically made by fermenting rice wash water with milk. Used as a microbial inoculant and soil drench.",
       "related": ["LAB", "EM-1", "KNF"],
       "category": "preparations",
-      "articleLink": "/articles/impact-of-LAB"
+      "articleLink": "/articles/impact-of-lab"
     },
     "SAR": {
       "term": "Systemic Acquired Resistance",
@@ -61,7 +61,7 @@
       "definition": "Cultivated indigenous microbes that serve beneficial purposes in agriculture. The BIM cultivation process involves capturing wild microbes and culturing them for garden use.",
       "related": ["IMO", "KNF"],
       "category": "microbiology",
-      "articleLink": "/tutorials/BIM-culturing"
+      "articleLink": "/tutorials/bim-culturing"
     },
     "EWC": {
       "term": "Earthworm Castings",
@@ -77,7 +77,7 @@
       "definition": "A preparation made from sprouted seeds (typically barley, corn, or alfalfa) blended with water. Provides plant hormones, enzymes, and amino acids. Different seeds offer different benefits.",
       "related": ["barley", "corn", "alfalfa", "cytokinins", "auxins"],
       "category": "preparations",
-      "articleLink": "/tutorials/Sprouted-Seed-Tea"
+      "articleLink": "/tutorials/sprouted-seed-tea"
     },
     "AACT": {
       "term": "Actively Aerated Compost Tea",
@@ -173,7 +173,7 @@
       "definition": "A key precursor in cannabinoid biosynthesis, formed from hexanoyl-CoA by polyketide synthase. Combines with geranyl pyrophosphate to form cannabigerolic acid (CBGA), the parent cannabinoid.",
       "related": ["hexanoate", "cannabinoids", "biosynthesis"],
       "category": "biochemistry",
-      "articleLink": "/articles/impact-of-LAB"
+      "articleLink": "/articles/impact-of-lab"
     },
     "hexanoate": {
       "term": "Hexanoic Acid / Hexanoate",
@@ -181,7 +181,7 @@
       "definition": "A short-chain fatty acid (C6) that serves as the precursor for hexanoyl-CoA in cannabinoid biosynthesis. Found naturally in ruminant milk fats and potentially produced during LAB fermentation.",
       "related": ["olivetolic acid", "LAB", "cannabinoids"],
       "category": "biochemistry",
-      "articleLink": "/articles/impact-of-LAB"
+      "articleLink": "/articles/impact-of-lab"
     },
     "C3 plants": {
       "term": "C3 Plants",
