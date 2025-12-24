@@ -1,0 +1,399 @@
+---
+/**
+ * RadarChart.astro
+ * 
+ * A multi-dimensional radar/spider chart for comparing properties across items.
+ * Perfect for comparing mineral profiles, nutrient ratios, or multi-factor assessments.
+ * 
+ * Usage in MDX:
+ *   import RadarChart from '../components/charts/RadarChart.astro';
+ *   
+ *   <RadarChart
+ *     axes={[
+ *       { key: 'silica', label: 'Silica', max: 100 },
+ *       { key: 'calcium', label: 'Calcium', max: 100 },
+ *       { key: 'magnesium', label: 'Magnesium', max: 100 },
+ *       { key: 'iron', label: 'Iron', max: 100 },
+ *       { key: 'trace', label: 'Trace Elements', max: 100 }
+ *     ]}
+ *     datasets={[
+ *       { name: 'Azomite', values: { silica: 70, calcium: 45, magnesium: 30, iron: 60, trace: 90 } },
+ *       { name: 'Basalt', values: { silica: 95, calcium: 25, magnesium: 40, iron: 80, trace: 50 } }
+ *     ]}
+ *     title="Rock Dust Mineral Profiles"
+ *     category="soil-science"
+ *   />
+ */
+
+import type { RadarChartProps, ChartCategory } from '../../types';
+
+interface Props extends RadarChartProps {}
+
+const {
+  axes,
+  datasets,
+  title,
+  caption,
+  showLabels = true,
+  showValues = false,
+  category = 'default',
+} = Astro.props;
+
+// Category color schemes
+const categoryColors: Record<ChartCategory, string[]> = {
+  'microbiology': ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
+  'plant-biology': ['#16a34a', '#22c55e', '#4ade80', '#86efac'],
+  'fermentation': ['#ea580c', '#f97316', '#fb923c', '#fdba74'],
+  'soil-science': ['#78716c', '#a8a29e', '#d6d3d1', '#e7e5e4'],
+  'default': ['#0d9488', '#14b8a6', '#2dd4bf', '#5eead4'],
+};
+
+const chartColors = categoryColors[category];
+
+// SVG dimensions
+const size = 400;
+const center = size / 2;
+const radius = 150;
+const levels = 5;
+
+// Calculate angle for each axis
+const angleStep = (2 * Math.PI) / axes.length;
+
+// Get point position
+function getPoint(axisIndex: number, value: number, max: number): { x: number; y: number } {
+  const angle = -Math.PI / 2 + axisIndex * angleStep; // Start from top
+  const r = (value / max) * radius;
+  return {
+    x: center + r * Math.cos(angle),
+    y: center + r * Math.sin(angle),
+  };
+}
+
+// Get axis endpoint (for labels and lines)
+function getAxisPoint(axisIndex: number, distance: number = radius): { x: number; y: number } {
+  const angle = -Math.PI / 2 + axisIndex * angleStep;
+  return {
+    x: center + distance * Math.cos(angle),
+    y: center + distance * Math.sin(angle),
+  };
+}
+
+// Generate polygon path for a dataset
+function getPolygonPath(dataset: typeof datasets[0]): string {
+  const points = axes.map((axis, i) => {
+    const value = dataset.values[axis.key] || 0;
+    const max = axis.max || 100;
+    return getPoint(i, value, max);
+  });
+  
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+}
+
+// Generate level ring paths
+function getLevelPath(level: number): string {
+  const r = (level / levels) * radius;
+  const points = axes.map((_, i) => {
+    const angle = -Math.PI / 2 + i * angleStep;
+    return {
+      x: center + r * Math.cos(angle),
+      y: center + r * Math.sin(angle),
+    };
+  });
+  
+  return points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ') + ' Z';
+}
+
+const chartId = `radar-chart-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<figure class={`chart-container category-${category}`} role="figure" aria-labelledby={`${chartId}-title`}>
+  {title && <figcaption id={`${chartId}-title`} class="chart-title">{title}</figcaption>}
+  
+  <div class="chart-wrapper">
+    <svg 
+      viewBox={`0 0 ${size} ${size}`} 
+      class="chart-svg"
+      role="img"
+      aria-label={title || 'Radar chart'}
+    >
+      <!-- Level rings -->
+      <g class="level-rings">
+        {Array.from({ length: levels }, (_, i) => (
+          <path 
+            d={getLevelPath(i + 1)} 
+            class={`level-ring ${i === levels - 1 ? 'outer' : ''}`}
+          />
+        ))}
+      </g>
+      
+      <!-- Axis lines -->
+      <g class="axis-lines">
+        {axes.map((_, i) => {
+          const endpoint = getAxisPoint(i);
+          return (
+            <line 
+              x1={center} 
+              y1={center} 
+              x2={endpoint.x} 
+              y2={endpoint.y} 
+              class="axis-line"
+            />
+          );
+        })}
+      </g>
+      
+      <!-- Data polygons -->
+      <g class="data-polygons">
+        {datasets.map((dataset, datasetIndex) => {
+          const color = dataset.color || chartColors[datasetIndex % chartColors.length];
+          return (
+            <g class="dataset" data-name={dataset.name}>
+              <path 
+                d={getPolygonPath(dataset)} 
+                class="data-polygon"
+                style={`fill: ${color}; stroke: ${color};`}
+              />
+              
+              {/* Data points */}
+              {axes.map((axis, axisIndex) => {
+                const value = dataset.values[axis.key] || 0;
+                const max = axis.max || 100;
+                const point = getPoint(axisIndex, value, max);
+                return (
+                  <g class="data-point-group">
+                    <circle 
+                      cx={point.x} 
+                      cy={point.y} 
+                      r="4"
+                      class="data-point"
+                      style={`fill: ${color};`}
+                    />
+                    <title>{`${dataset.name} - ${axis.label}: ${value}`}</title>
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })}
+      </g>
+      
+      <!-- Axis labels -->
+      {showLabels && (
+        <g class="axis-labels">
+          {axes.map((axis, i) => {
+            const labelPoint = getAxisPoint(i, radius + 25);
+            const angle = -Math.PI / 2 + i * angleStep;
+            
+            // Determine text anchor based on position
+            let textAnchor = 'middle';
+            if (Math.cos(angle) > 0.1) textAnchor = 'start';
+            else if (Math.cos(angle) < -0.1) textAnchor = 'end';
+            
+            let dy = '0.35em';
+            if (Math.sin(angle) < -0.5) dy = '0em';
+            else if (Math.sin(angle) > 0.5) dy = '0.7em';
+            
+            return (
+              <text 
+                x={labelPoint.x} 
+                y={labelPoint.y} 
+                class="axis-label-text"
+                text-anchor={textAnchor}
+                dy={dy}
+              >
+                {axis.label}
+              </text>
+            );
+          })}
+        </g>
+      )}
+      
+      <!-- Center point -->
+      <circle cx={center} cy={center} r="3" class="center-point" />
+    </svg>
+  </div>
+  
+  <!-- Legend -->
+  {datasets.length > 1 && (
+    <div class="chart-legend">
+      {datasets.map((dataset, index) => (
+        <div class="legend-item">
+          <span 
+            class="legend-dot" 
+            style={`background-color: ${dataset.color || chartColors[index % chartColors.length]};`}
+          />
+          <span class="legend-label">{dataset.name}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  
+  {caption && <p class="chart-caption">{caption}</p>}
+</figure>
+
+<style>
+  .chart-container {
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  :root.dark-theme .chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .chart-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--black));
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .chart-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .chart-svg {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+
+  .level-ring {
+    fill: none;
+    stroke: rgb(var(--gray-light));
+    stroke-width: 1;
+  }
+
+  .level-ring.outer {
+    stroke-width: 1.5;
+  }
+
+  :root.dark-theme .level-ring {
+    stroke: rgba(255, 255, 255, 0.1);
+  }
+
+  .axis-line {
+    stroke: rgb(var(--gray-light));
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+
+  :root.dark-theme .axis-line {
+    stroke: rgba(255, 255, 255, 0.15);
+  }
+
+  .data-polygon {
+    fill-opacity: 0.2;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: fill-opacity 0.2s ease;
+  }
+
+  .dataset:hover .data-polygon {
+    fill-opacity: 0.35;
+  }
+
+  .data-point {
+    stroke: white;
+    stroke-width: 2;
+    transition: r 0.2s ease;
+  }
+
+  :root.dark-theme .data-point {
+    stroke: #1c1917;
+  }
+
+  .data-point-group:hover .data-point {
+    r: 6;
+  }
+
+  .center-point {
+    fill: rgb(var(--gray));
+  }
+
+  .axis-label-text {
+    font-size: 11px;
+    fill: rgb(var(--gray));
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  .legend-label {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+  }
+
+  .chart-caption {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    margin: 1rem 0 0 0;
+    font-style: italic;
+  }
+
+  /* Category-specific accent borders */
+  .chart-container.category-microbiology {
+    border-left: 3px solid #8b5cf6;
+  }
+
+  .chart-container.category-plant-biology {
+    border-left: 3px solid #16a34a;
+  }
+
+  .chart-container.category-fermentation {
+    border-left: 3px solid #ea580c;
+  }
+
+  .chart-container.category-soil-science {
+    border-left: 3px solid #78716c;
+  }
+
+  .chart-container.category-default {
+    border-left: 3px solid var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .chart-container {
+      padding: 1rem;
+    }
+
+    .chart-svg {
+      max-width: 300px;
+    }
+
+    .axis-label-text {
+      font-size: 9px;
+    }
+
+    .chart-legend {
+      gap: 0.75rem;
+    }
+  }
+</style>

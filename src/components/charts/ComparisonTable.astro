@@ -1,0 +1,331 @@
+---
+/**
+ * ComparisonTable.astro
+ * 
+ * A styled data table with optional heat-coloring for cells.
+ * Perfect for comparing mineral compositions, treatment results, or multi-factor assessments.
+ * 
+ * Usage in MDX:
+ *   import ComparisonTable from '../components/charts/ComparisonTable.astro';
+ *   
+ *   <ComparisonTable
+ *     columns={['Property', 'Azomite', 'GRD', 'Basalt', 'Gypsum']}
+ *     rows={[
+ *       { header: 'Silica', cells: ['Medium', 'Medium', 'High', 'None'] },
+ *       { header: 'Calcium', cells: ['High', 'Low', 'Low', 'Very High'] },
+ *       { header: 'Lead/Arsenic', cells: [
+ *         { value: 'High', heatValue: 0.9, highlight: true },
+ *         { value: 'Low', heatValue: 0.2 },
+ *         { value: 'Very Low', heatValue: 0.1 },
+ *         { value: 'None', heatValue: 0 }
+ *       ]}
+ *     ]}
+ *     title="Rock Dust Composition Comparison"
+ *     showHeat={true}
+ *     category="soil-science"
+ *   />
+ * 
+ * Numeric data with heat map:
+ *   <ComparisonTable
+ *     columns={['Treatment', 'Density %', 'Number %']}
+ *     rows={[
+ *       { header: 'Control', cells: [0, 0] },
+ *       { header: 'JA', cells: [
+ *         { value: '+52.7%', heatValue: 0.8 },
+ *         { value: '+34.6%', heatValue: 0.6 }
+ *       ]},
+ *       { header: 'SA', cells: [
+ *         { value: '-15%', heatValue: 0.3 },
+ *         { value: '-10%', heatValue: 0.2 }
+ *       ]}
+ *     ]}
+ *     showHeat={true}
+ *   />
+ */
+
+import type { ComparisonTableProps, ComparisonTableCell, ChartCategory } from '../../types';
+
+interface Props extends ComparisonTableProps {}
+
+const {
+  columns,
+  rows,
+  title,
+  caption,
+  showHeat = false,
+  heatColors = { low: '#dcfce7', high: '#fecaca' },
+  category = 'default',
+} = Astro.props;
+
+// Category color schemes for headers
+const categoryAccents: Record<ChartCategory, string> = {
+  'microbiology': '#8b5cf6',
+  'plant-biology': '#16a34a',
+  'fermentation': '#ea580c',
+  'soil-science': '#78716c',
+  'default': '#0d9488',
+};
+
+const accentColor = categoryAccents[category];
+
+// Helper to normalize cell data
+function normalizeCell(cell: string | number | ComparisonTableCell): ComparisonTableCell {
+  if (typeof cell === 'object' && cell !== null && 'value' in cell) {
+    return cell;
+  }
+  return { value: cell };
+}
+
+// Calculate heat color
+function getHeatColor(heatValue: number | undefined): string {
+  if (heatValue === undefined || !showHeat) return 'transparent';
+  
+  // Interpolate between low and high colors
+  const lowRGB = hexToRGB(heatColors.low);
+  const highRGB = hexToRGB(heatColors.high);
+  
+  const r = Math.round(lowRGB.r + (highRGB.r - lowRGB.r) * heatValue);
+  const g = Math.round(lowRGB.g + (highRGB.g - lowRGB.g) * heatValue);
+  const b = Math.round(lowRGB.b + (highRGB.b - lowRGB.b) * heatValue);
+  
+  return `rgba(${r}, ${g}, ${b}, 0.4)`;
+}
+
+function hexToRGB(hex: string): { r: number; g: number; b: number } {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : { r: 0, g: 0, b: 0 };
+}
+
+const chartId = `comparison-table-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<figure class={`table-container category-${category}`} role="figure" aria-labelledby={`${chartId}-title`}>
+  {title && <figcaption id={`${chartId}-title`} class="table-title">{title}</figcaption>}
+  
+  <div class="table-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          {columns.map((col, index) => (
+            <th class={index === 0 ? 'header-cell first' : 'header-cell'} style={index === 0 ? `border-left-color: ${accentColor};` : ''}>
+              {col}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            <th class="row-header">{row.header}</th>
+            {row.cells.map((cell) => {
+              const normalizedCell = normalizeCell(cell);
+              const heatBg = getHeatColor(normalizedCell.heatValue);
+              
+              return (
+                <td 
+                  class={`data-cell ${normalizedCell.highlight ? 'highlighted' : ''}`}
+                  style={showHeat && normalizedCell.heatValue !== undefined ? `background-color: ${heatBg};` : ''}
+                >
+                  {normalizedCell.value}
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  
+  {showHeat && (
+    <div class="heat-legend">
+      <span class="legend-label">Low</span>
+      <div class="legend-gradient" style={`background: linear-gradient(to right, ${heatColors.low}, ${heatColors.high});`} />
+      <span class="legend-label">High</span>
+    </div>
+  )}
+  
+  {caption && <p class="table-caption">{caption}</p>}
+</figure>
+
+<style>
+  .table-container {
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  :root.dark-theme .table-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .table-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--black));
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .header-cell {
+    background: rgb(var(--gray-light));
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: rgb(var(--black));
+    border-bottom: 2px solid rgb(var(--gray-light));
+    white-space: nowrap;
+  }
+
+  :root.dark-theme .header-cell {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .header-cell.first {
+    border-left: 3px solid;
+    border-top-left-radius: 4px;
+  }
+
+  .header-cell:last-child {
+    border-top-right-radius: 4px;
+  }
+
+  .row-header {
+    background: rgba(var(--gray-light), 0.5);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-weight: 500;
+    color: rgb(var(--gray-dark));
+    border-bottom: 1px solid rgb(var(--gray-light));
+    white-space: nowrap;
+  }
+
+  :root.dark-theme .row-header {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .data-cell {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    color: rgb(var(--gray-dark));
+    border-bottom: 1px solid rgb(var(--gray-light));
+    transition: background-color 0.2s ease;
+  }
+
+  :root.dark-theme .data-cell {
+    border-color: rgba(255, 255, 255, 0.08);
+    color: rgb(var(--gray));
+  }
+
+  .data-cell.highlighted {
+    font-weight: 600;
+    position: relative;
+  }
+
+  .data-cell.highlighted::before {
+    content: '⚠';
+    margin-right: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  tr:hover .data-cell {
+    background-color: rgba(var(--gray-light), 0.3);
+  }
+
+  :root.dark-theme tr:hover .data-cell {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  tr:last-child .row-header,
+  tr:last-child .data-cell {
+    border-bottom: none;
+  }
+
+  .heat-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .legend-gradient {
+    width: 100px;
+    height: 12px;
+    border-radius: 2px;
+    border: 1px solid rgb(var(--gray-light));
+  }
+
+  :root.dark-theme .legend-gradient {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .legend-label {
+    font-size: 0.7rem;
+    color: rgb(var(--gray));
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .table-caption {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    margin: 1rem 0 0 0;
+    font-style: italic;
+  }
+
+  /* Category-specific accent borders */
+  .table-container.category-microbiology {
+    border-left: 3px solid #8b5cf6;
+  }
+
+  .table-container.category-plant-biology {
+    border-left: 3px solid #16a34a;
+  }
+
+  .table-container.category-fermentation {
+    border-left: 3px solid #ea580c;
+  }
+
+  .table-container.category-soil-science {
+    border-left: 3px solid #78716c;
+  }
+
+  .table-container.category-default {
+    border-left: 3px solid var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .table-container {
+      padding: 1rem;
+    }
+
+    .header-cell,
+    .row-header,
+    .data-cell {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.8rem;
+    }
+  }
+</style>

@@ -1,0 +1,481 @@
+---
+/**
+ * FlowDiagram.astro
+ * 
+ * A flow/pathway diagram for biosynthesis pathways and process flows.
+ * Uses CSS flexbox with connecting lines between nodes.
+ * 
+ * Usage in MDX:
+ *   import FlowDiagram from '../components/charts/FlowDiagram.astro';
+ *   
+ *   <FlowDiagram
+ *     nodes={[
+ *       { id: 'gpp', label: 'GPP', description: 'Geranyl pyrophosphate', type: 'input' },
+ *       { id: 'cbga', label: 'CBGA', description: 'Cannabigerolic acid', type: 'process' },
+ *       { id: 'thca', label: 'THCA', description: 'Δ9-THCA synthase', type: 'output' },
+ *       { id: 'cbda', label: 'CBDA', description: 'CBDA synthase', type: 'output' },
+ *       { id: 'cbca', label: 'CBCA', description: 'CBCA synthase', type: 'output' }
+ *     ]}
+ *     connections={[
+ *       { from: 'gpp', to: 'cbga' },
+ *       { from: 'cbga', to: 'thca', label: 'THCA synthase' },
+ *       { from: 'cbga', to: 'cbda', label: 'CBDA synthase' },
+ *       { from: 'cbga', to: 'cbca', label: 'CBCA synthase' }
+ *     ]}
+ *     title="Cannabinoid Biosynthesis Pathway"
+ *     category="plant-biology"
+ *   />
+ * 
+ * Linear process flow:
+ *   <FlowDiagram
+ *     nodes={[
+ *       { id: 'rice', label: 'Rice Wash', type: 'input' },
+ *       { id: 'lab', label: 'LAB Culture', type: 'process' },
+ *       { id: 'milk', label: 'Milk Separation', type: 'process' },
+ *       { id: 'serum', label: 'LAB Serum', type: 'output' }
+ *     ]}
+ *     connections={[
+ *       { from: 'rice', to: 'lab', label: '5-7 days' },
+ *       { from: 'lab', to: 'milk', label: 'Add milk 1:10' },
+ *       { from: 'milk', to: 'serum', label: '7 days' }
+ *     ]}
+ *     direction="horizontal"
+ *   />
+ */
+
+import type { FlowDiagramProps, FlowNode, ChartCategory } from '../../types';
+
+interface Props extends FlowDiagramProps {}
+
+const {
+  nodes,
+  connections,
+  title,
+  caption,
+  direction = 'horizontal',
+  category = 'default',
+} = Astro.props;
+
+// Category color schemes
+const categoryColors: Record<ChartCategory, { input: string; process: string; output: string; decision: string }> = {
+  'microbiology': { input: '#ddd6fe', process: '#a78bfa', output: '#8b5cf6', decision: '#c4b5fd' },
+  'plant-biology': { input: '#dcfce7', process: '#4ade80', output: '#16a34a', decision: '#86efac' },
+  'fermentation': { input: '#fed7aa', process: '#fb923c', output: '#ea580c', decision: '#fdba74' },
+  'soil-science': { input: '#e7e5e4', process: '#a8a29e', output: '#78716c', decision: '#d6d3d1' },
+  'default': { input: '#ccfbf1', process: '#2dd4bf', output: '#0d9488', decision: '#5eead4' },
+};
+
+const colors = categoryColors[category];
+
+// Build adjacency for layout
+const nodeMap = new Map(nodes.map(n => [n.id, n]));
+const outgoingConnections = new Map<string, typeof connections>();
+const incomingConnections = new Map<string, typeof connections>();
+
+connections.forEach(conn => {
+  if (!outgoingConnections.has(conn.from)) outgoingConnections.set(conn.from, []);
+  if (!incomingConnections.has(conn.to)) incomingConnections.set(conn.to, []);
+  outgoingConnections.get(conn.from)!.push(conn);
+  incomingConnections.get(conn.to)!.push(conn);
+});
+
+// Find root nodes (no incoming connections)
+const rootNodes = nodes.filter(n => !incomingConnections.has(n.id) || incomingConnections.get(n.id)!.length === 0);
+
+// Build levels for layout
+function buildLevels(): FlowNode[][] {
+  const levels: FlowNode[][] = [];
+  const visited = new Set<string>();
+  let currentLevel = rootNodes.length > 0 ? rootNodes : [nodes[0]];
+  
+  while (currentLevel.length > 0) {
+    levels.push(currentLevel);
+    currentLevel.forEach(n => visited.add(n.id));
+    
+    const nextLevel: FlowNode[] = [];
+    currentLevel.forEach(node => {
+      const outgoing = outgoingConnections.get(node.id) || [];
+      outgoing.forEach(conn => {
+        const targetNode = nodeMap.get(conn.to);
+        if (targetNode && !visited.has(conn.to)) {
+          if (!nextLevel.find(n => n.id === conn.to)) {
+            nextLevel.push(targetNode);
+          }
+        }
+      });
+    });
+    
+    currentLevel = nextLevel;
+  }
+  
+  // Add any unvisited nodes to the last level
+  const unvisited = nodes.filter(n => !visited.has(n.id));
+  if (unvisited.length > 0) {
+    levels.push(unvisited);
+  }
+  
+  return levels;
+}
+
+const levels = buildLevels();
+
+// Get node color based on type
+function getNodeColor(type: FlowNode['type']): string {
+  return colors[type || 'process'];
+}
+
+// Get text color for contrast
+function getTextColor(bgColor: string): string {
+  // Simple luminance check
+  const hex = bgColor.replace('#', '');
+  const r = parseInt(hex.substr(0, 2), 16);
+  const g = parseInt(hex.substr(2, 2), 16);
+  const b = parseInt(hex.substr(4, 2), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.6 ? '#1c1917' : '#fafaf9';
+}
+
+const chartId = `flow-diagram-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<figure class={`flow-container category-${category} ${direction}`} role="figure" aria-labelledby={`${chartId}-title`}>
+  {title && <figcaption id={`${chartId}-title`} class="flow-title">{title}</figcaption>}
+  
+  <div class="flow-wrapper">
+    <div class="flow-diagram">
+      {levels.map((level, levelIndex) => (
+        <div class="flow-level" data-level={levelIndex}>
+          {level.map((node) => {
+            const bgColor = getNodeColor(node.type);
+            const textColor = getTextColor(bgColor);
+            const outgoing = outgoingConnections.get(node.id) || [];
+            
+            return (
+              <div class="flow-node-wrapper">
+                {/* Incoming connection labels */}
+                {levelIndex > 0 && incomingConnections.get(node.id)?.map((conn) => (
+                  conn.label && (
+                    <span class="connection-label incoming">{conn.label}</span>
+                  )
+                ))}
+                
+                <div 
+                  class={`flow-node node-${node.type || 'process'}`}
+                  style={`background-color: ${bgColor}; color: ${textColor};`}
+                  data-id={node.id}
+                >
+                  <span class="node-label">{node.label}</span>
+                  {node.description && (
+                    <span class="node-description" style={`color: ${textColor}; opacity: 0.8;`}>
+                      {node.description}
+                    </span>
+                  )}
+                </div>
+                
+                {/* Outgoing arrows */}
+                {outgoing.length > 0 && levelIndex < levels.length - 1 && (
+                  <div class="connection-arrows">
+                    {outgoing.length === 1 ? (
+                      <div class="arrow single">
+                        <div class="arrow-line" />
+                        <div class="arrow-head" />
+                      </div>
+                    ) : (
+                      <div class="arrow-fan">
+                        {outgoing.map((_, i) => (
+                          <div class={`arrow fan-${i}`}>
+                            <div class="arrow-line" />
+                            <div class="arrow-head" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  </div>
+  
+  <!-- Legend -->
+  <div class="flow-legend">
+    <div class="legend-item">
+      <span class="legend-node" style={`background-color: ${colors.input};`} />
+      <span class="legend-label">Input</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-node" style={`background-color: ${colors.process};`} />
+      <span class="legend-label">Process</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-node" style={`background-color: ${colors.output};`} />
+      <span class="legend-label">Output</span>
+    </div>
+  </div>
+  
+  {caption && <p class="flow-caption">{caption}</p>}
+</figure>
+
+<style>
+  .flow-container {
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  :root.dark-theme .flow-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .flow-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--black));
+    margin: 0 0 1.5rem 0;
+    text-align: center;
+  }
+
+  .flow-wrapper {
+    overflow-x: auto;
+    padding: 1rem 0;
+  }
+
+  .flow-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    min-width: max-content;
+  }
+
+  .flow-container.vertical .flow-diagram {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .flow-level {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .flow-container.vertical .flow-level {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .flow-node-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+  }
+
+  .flow-container.vertical .flow-node-wrapper {
+    flex-direction: row;
+  }
+
+  .flow-node {
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+    text-align: center;
+    min-width: 100px;
+    max-width: 160px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+  }
+
+  .flow-node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .flow-node.node-input {
+    border-radius: 20px;
+  }
+
+  .flow-node.node-output {
+    border-radius: 4px;
+  }
+
+  .flow-node.node-decision {
+    transform: rotate(0deg);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    padding: 1.5rem 1rem;
+  }
+
+  .node-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: block;
+  }
+
+  .node-description {
+    font-size: 0.7rem;
+    display: block;
+    margin-top: 0.25rem;
+    line-height: 1.3;
+  }
+
+  .connection-label {
+    font-size: 0.65rem;
+    color: rgb(var(--gray));
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    max-width: 120px;
+  }
+
+  .connection-arrows {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+
+  .flow-container.horizontal .connection-arrows {
+    margin-top: 0;
+    margin-left: 0.5rem;
+    flex-direction: row;
+  }
+
+  .arrow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .flow-container.horizontal .arrow {
+    flex-direction: row;
+  }
+
+  .flow-container.vertical .arrow {
+    flex-direction: column;
+  }
+
+  .arrow-line {
+    background: rgb(var(--gray));
+    opacity: 0.5;
+  }
+
+  .flow-container.horizontal .arrow-line {
+    width: 2rem;
+    height: 2px;
+  }
+
+  .flow-container.vertical .arrow-line {
+    width: 2px;
+    height: 2rem;
+  }
+
+  .arrow-head {
+    width: 0;
+    height: 0;
+    border-style: solid;
+  }
+
+  .flow-container.horizontal .arrow-head {
+    border-width: 6px 0 6px 8px;
+    border-color: transparent transparent transparent rgb(var(--gray));
+    opacity: 0.5;
+  }
+
+  .flow-container.vertical .arrow-head {
+    border-width: 8px 6px 0 6px;
+    border-color: rgb(var(--gray)) transparent transparent transparent;
+    opacity: 0.5;
+  }
+
+  .arrow-fan {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .flow-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-node {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+  }
+
+  .legend-label {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+  }
+
+  .flow-caption {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    margin: 1rem 0 0 0;
+    font-style: italic;
+  }
+
+  /* Category-specific accent borders */
+  .flow-container.category-microbiology {
+    border-left: 3px solid #8b5cf6;
+  }
+
+  .flow-container.category-plant-biology {
+    border-left: 3px solid #16a34a;
+  }
+
+  .flow-container.category-fermentation {
+    border-left: 3px solid #ea580c;
+  }
+
+  .flow-container.category-soil-science {
+    border-left: 3px solid #78716c;
+  }
+
+  .flow-container.category-default {
+    border-left: 3px solid var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .flow-container {
+      padding: 1rem;
+    }
+
+    .flow-diagram {
+      gap: 1.5rem;
+    }
+
+    .flow-node {
+      min-width: 80px;
+      max-width: 120px;
+      padding: 0.5rem 0.75rem;
+    }
+
+    .node-label {
+      font-size: 0.8rem;
+    }
+
+    .node-description {
+      font-size: 0.65rem;
+    }
+
+    .flow-legend {
+      gap: 0.75rem;
+    }
+  }
+</style>

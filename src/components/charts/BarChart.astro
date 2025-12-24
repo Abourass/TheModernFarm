@@ -1,0 +1,489 @@
+---
+/**
+ * BarChart.astro
+ * 
+ * A flexible bar chart component for visualizing comparisons.
+ * Supports grouped bars, stacked bars, horizontal orientation, and category-based theming.
+ * 
+ * Usage in MDX:
+ *   import BarChart from '../components/charts/BarChart.astro';
+ *   
+ *   <BarChart
+ *     data={[
+ *       { label: 'Control', value: 100 },
+ *       { label: 'LAB Treatment', value: 119 },
+ *       { label: 'FPE Treatment', value: 121 }
+ *     ]}
+ *     title="Yield Comparison"
+ *     yLabel="Yield (%)"
+ *     unit="%"
+ *     category="microbiology"
+ *   />
+ * 
+ * Grouped example:
+ *   <BarChart
+ *     data={[
+ *       { label: 'Columbia', values: [
+ *         { label: 'Control', value: 0 },
+ *         { label: 'JA', value: 52.7 },
+ *         { label: 'SA', value: -15 }
+ *       ]},
+ *       { label: 'jar1-1', values: [
+ *         { label: 'Control', value: 0 },
+ *         { label: 'JA', value: 55.9 },
+ *         { label: 'SA', value: -12 }
+ *       ]}
+ *     ]}
+ *     title="Trichome Density Change by Treatment"
+ *     yLabel="Change (%)"
+ *   />
+ */
+
+import type { BarChartProps, BarChartDataPoint, BarChartGroup, ChartCategory } from '../../types';
+
+interface Props extends BarChartProps {}
+
+const {
+  data,
+  title,
+  caption,
+  xLabel,
+  yLabel,
+  yMax: providedYMax,
+  yMin: providedYMin,
+  unit = '',
+  stacked = false,
+  horizontal = false,
+  showValues = true,
+  category = 'default',
+  colors: providedColors,
+} = Astro.props;
+
+// Category color schemes
+const categoryColors: Record<ChartCategory, string[]> = {
+  'microbiology': ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
+  'plant-biology': ['#16a34a', '#22c55e', '#4ade80', '#86efac'],
+  'fermentation': ['#ea580c', '#f97316', '#fb923c', '#fdba74'],
+  'soil-science': ['#78716c', '#a8a29e', '#d6d3d1', '#e7e5e4'],
+  'default': ['#0d9488', '#14b8a6', '#2dd4bf', '#5eead4'],
+};
+
+const chartColors = providedColors || categoryColors[category];
+
+// Determine if data is grouped
+function isGrouped(d: BarChartDataPoint[] | BarChartGroup[]): d is BarChartGroup[] {
+  return d.length > 0 && 'values' in d[0];
+}
+
+const isGroupedData = isGrouped(data);
+
+// Calculate dimensions and values
+let allValues: number[] = [];
+let labels: string[] = [];
+let groupLabels: string[] = [];
+
+if (isGroupedData) {
+  groupLabels = (data as BarChartGroup[]).map(g => g.label);
+  labels = (data as BarChartGroup[])[0]?.values.map(v => v.label) || [];
+  allValues = (data as BarChartGroup[]).flatMap(g => g.values.map(v => v.value));
+} else {
+  labels = (data as BarChartDataPoint[]).map(d => d.label);
+  allValues = (data as BarChartDataPoint[]).map(d => d.value);
+}
+
+const minValue = Math.min(...allValues, 0);
+const maxValue = Math.max(...allValues);
+const yMin = providedYMin ?? Math.floor(minValue / 10) * 10;
+const yMax = providedYMax ?? Math.ceil(maxValue / 10) * 10 + 10;
+const range = yMax - yMin;
+
+// Generate Y-axis ticks
+const tickCount = 5;
+const tickStep = range / (tickCount - 1);
+const yTicks = Array.from({ length: tickCount }, (_, i) => yMin + tickStep * i);
+
+// Calculate bar height percentage
+function getBarHeight(value: number): number {
+  return ((value - Math.min(yMin, 0)) / range) * 100;
+}
+
+// Calculate bar position for negative values
+function getBarBottom(value: number): number {
+  if (value >= 0) {
+    return ((0 - yMin) / range) * 100;
+  }
+  return ((value - yMin) / range) * 100;
+}
+
+function getBarActualHeight(value: number): number {
+  return (Math.abs(value) / range) * 100;
+}
+
+const chartId = `bar-chart-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<figure class={`chart-container category-${category}`} role="figure" aria-labelledby={`${chartId}-title`}>
+  {title && <figcaption id={`${chartId}-title`} class="chart-title">{title}</figcaption>}
+  
+  <div class={`chart-wrapper ${horizontal ? 'horizontal' : 'vertical'}`}>
+    {yLabel && <span class="axis-label y-axis-label">{yLabel}</span>}
+    
+    <div class="chart-area">
+      <!-- Y-axis -->
+      <div class="y-axis">
+        {yTicks.reverse().map((tick) => (
+          <span class="y-tick">{tick}{unit}</span>
+        ))}
+      </div>
+      
+      <!-- Bars container -->
+      <div class="bars-container">
+        <!-- Grid lines -->
+        <div class="grid-lines">
+          {yTicks.map(() => (
+            <div class="grid-line" />
+          ))}
+        </div>
+        
+        <!-- Zero line if we have negative values -->
+        {yMin < 0 && (
+          <div class="zero-line" style={`bottom: ${((0 - yMin) / range) * 100}%`} />
+        )}
+        
+        <!-- Bars -->
+        <div class="bars">
+          {isGroupedData ? (
+            (data as BarChartGroup[]).map((group, groupIndex) => (
+              <div class="bar-group" data-label={group.label}>
+                <div class="bar-group-bars">
+                  {group.values.map((item, itemIndex) => (
+                    <div 
+                      class={`bar ${item.value < 0 ? 'negative' : ''}`}
+                      style={`
+                        height: ${getBarActualHeight(item.value)}%;
+                        bottom: ${getBarBottom(item.value)}%;
+                        background-color: ${item.color || chartColors[itemIndex % chartColors.length]};
+                      `}
+                      title={`${item.label}: ${item.value}${unit}`}
+                    >
+                      {showValues && (
+                        <span class={`bar-value ${item.value < 0 ? 'below' : 'above'}`}>
+                          {item.value > 0 ? '+' : ''}{item.value}{unit}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <span class="bar-label">{group.label}</span>
+              </div>
+            ))
+          ) : (
+            (data as BarChartDataPoint[]).map((item, index) => (
+              <div class="bar-group" data-label={item.label}>
+                <div class="bar-group-bars">
+                  <div 
+                    class={`bar ${item.value < 0 ? 'negative' : ''}`}
+                    style={`
+                      height: ${getBarActualHeight(item.value)}%;
+                      bottom: ${getBarBottom(item.value)}%;
+                      background-color: ${item.color || chartColors[index % chartColors.length]};
+                    `}
+                    title={`${item.label}: ${item.value}${unit}`}
+                  >
+                    {showValues && (
+                      <span class={`bar-value ${item.value < 0 ? 'below' : 'above'}`}>
+                        {item.value}{unit}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <span class="bar-label">{item.label}</span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+    
+    {xLabel && <span class="axis-label x-axis-label">{xLabel}</span>}
+  </div>
+  
+  <!-- Legend for grouped data -->
+  {isGroupedData && labels.length > 0 && (
+    <div class="chart-legend">
+      {labels.map((label, index) => (
+        <div class="legend-item">
+          <span class="legend-dot" style={`background-color: ${chartColors[index % chartColors.length]}`} />
+          <span class="legend-label">{label}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  
+  {caption && <p class="chart-caption">{caption}</p>}
+</figure>
+
+<style>
+  .chart-container {
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  :root.dark-theme .chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .chart-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--black));
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .axis-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgb(var(--gray));
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .y-axis-label {
+    position: absolute;
+    left: -0.5rem;
+    top: 50%;
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+
+  .x-axis-label {
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .chart-area {
+    display: flex;
+    gap: 0.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .y-axis {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0.25rem 0;
+    min-width: 3rem;
+  }
+
+  .y-tick {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+    line-height: 1;
+  }
+
+  .bars-container {
+    flex: 1;
+    position: relative;
+    height: 200px;
+  }
+
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .grid-line {
+    height: 1px;
+    background: rgb(var(--gray-light));
+  }
+
+  :root.dark-theme .grid-line {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .zero-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgb(var(--gray));
+    z-index: 1;
+  }
+
+  .bars {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 0 1rem;
+  }
+
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    max-width: 120px;
+  }
+
+  .bar-group-bars {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+    height: 100%;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .bar {
+    position: absolute;
+    width: 24px;
+    min-height: 4px;
+    border-radius: 4px 4px 0 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    cursor: default;
+  }
+
+  .bar-group-bars .bar {
+    position: relative;
+  }
+
+  .bar:hover {
+    opacity: 0.85;
+    transform: scaleY(1.02);
+    transform-origin: bottom;
+  }
+
+  .bar.negative {
+    border-radius: 0 0 4px 4px;
+  }
+
+  .bar-value {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+    white-space: nowrap;
+    color: rgb(var(--gray-dark));
+  }
+
+  .bar-value.above {
+    bottom: 100%;
+    margin-bottom: 4px;
+  }
+
+  .bar-value.below {
+    top: 100%;
+    margin-top: 4px;
+  }
+
+  :root.dark-theme .bar-value {
+    color: rgb(var(--gray));
+  }
+
+  .bar-label {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+
+  .legend-label {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+  }
+
+  .chart-caption {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    margin: 1rem 0 0 0;
+    font-style: italic;
+  }
+
+  /* Category-specific accent borders */
+  .chart-container.category-microbiology {
+    border-left: 3px solid #8b5cf6;
+  }
+
+  .chart-container.category-plant-biology {
+    border-left: 3px solid #16a34a;
+  }
+
+  .chart-container.category-fermentation {
+    border-left: 3px solid #ea580c;
+  }
+
+  .chart-container.category-soil-science {
+    border-left: 3px solid #78716c;
+  }
+
+  .chart-container.category-default {
+    border-left: 3px solid var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .chart-container {
+      padding: 1rem;
+    }
+
+    .bars-container {
+      height: 160px;
+    }
+
+    .bar {
+      width: 16px;
+    }
+
+    .chart-legend {
+      gap: 0.75rem;
+    }
+  }
+</style>

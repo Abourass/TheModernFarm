@@ -1,0 +1,701 @@
+---
+/**
+ * Chart Components Documentation
+ * 
+ * A living documentation page showcasing all available chart components
+ * with example usage and sample data.
+ */
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import BarChart from "../components/charts/BarChart.astro";
+import LineChart from "../components/charts/LineChart.astro";
+import RadarChart from "../components/charts/RadarChart.astro";
+import Timeline from "../components/charts/Timeline.astro";
+import ComparisonTable from "../components/charts/ComparisonTable.astro";
+import FlowDiagram from "../components/charts/FlowDiagram.astro";
+
+const title = "Chart Components Documentation";
+const description = "Reference documentation for all available chart components with examples and usage instructions.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      main {
+        width: 960px;
+        max-width: calc(100% - 4em);
+        margin: 0 auto;
+        padding: 3rem 0;
+      }
+
+      .page-header {
+        margin-bottom: 3rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid rgb(var(--gray-light));
+      }
+
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin: 0 0 1rem 0;
+      }
+
+      .page-description {
+        font-size: 1.125rem;
+        color: rgb(var(--gray));
+        line-height: 1.7;
+        margin: 0;
+      }
+
+      .component-section {
+        margin-bottom: 4rem;
+      }
+
+      .component-header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .component-title {
+        font-size: 1.75rem;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      .component-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.25rem 0.5rem;
+        background: var(--accent);
+        color: white;
+        border-radius: 4px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      .component-description {
+        color: rgb(var(--gray));
+        line-height: 1.7;
+        margin: 0 0 1.5rem 0;
+      }
+
+      .example-container {
+        margin-bottom: 2rem;
+      }
+
+      .example-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgb(var(--gray));
+        margin-bottom: 0.5rem;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      }
+
+      .code-block {
+        background: rgb(var(--gray-light));
+        border-radius: 8px;
+        padding: 1.25rem;
+        overflow-x: auto;
+        font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        margin-top: 1rem;
+      }
+
+      :root.dark-theme .code-block {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .code-block code {
+        color: rgb(var(--gray-dark));
+      }
+
+      :root.dark-theme .code-block code {
+        color: rgb(var(--gray));
+      }
+
+      .props-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+      }
+
+      .props-table th {
+        text-align: left;
+        padding: 0.75rem;
+        background: rgb(var(--gray-light));
+        font-weight: 600;
+        border-bottom: 2px solid rgb(var(--gray-light));
+      }
+
+      :root.dark-theme .props-table th {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .props-table td {
+        padding: 0.75rem;
+        border-bottom: 1px solid rgb(var(--gray-light));
+        vertical-align: top;
+      }
+
+      :root.dark-theme .props-table td {
+        border-color: rgba(255, 255, 255, 0.08);
+      }
+
+      .prop-name {
+        font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+        color: var(--accent);
+        font-size: 0.8rem;
+      }
+
+      .prop-type {
+        font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+        color: rgb(var(--gray));
+        font-size: 0.75rem;
+      }
+
+      .prop-required {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        color: #dc2626;
+        font-weight: 600;
+      }
+
+      .category-demo {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+
+      .category-chip {
+        padding: 0.35rem 0.75rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: white;
+      }
+
+      .category-chip.microbiology { background: #8b5cf6; }
+      .category-chip.plant-biology { background: #16a34a; }
+      .category-chip.fermentation { background: #ea580c; }
+      .category-chip.soil-science { background: #78716c; }
+      .category-chip.default { background: #0d9488; }
+
+      .divider {
+        height: 1px;
+        background: rgb(var(--gray-light));
+        margin: 3rem 0;
+      }
+
+      :root.dark-theme .divider {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .toc {
+        background: rgb(var(--gray-light));
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 3rem;
+      }
+
+      :root.dark-theme .toc {
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .toc-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin: 0 0 1rem 0;
+      }
+
+      .toc-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.5rem;
+      }
+
+      .toc-list li a {
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 0.875rem;
+      }
+
+      .toc-list li a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <header class="page-header">
+        <h1 class="page-title">Chart Components</h1>
+        <p class="page-description">
+          A collection of reusable, accessible chart components for visualizing data in articles and tutorials.
+          All components support dark mode and category-based theming.
+        </p>
+      </header>
+
+      <!-- Table of Contents -->
+      <nav class="toc">
+        <h2 class="toc-title">Components</h2>
+        <ul class="toc-list">
+          <li><a href="#bar-chart">BarChart</a></li>
+          <li><a href="#line-chart">LineChart</a></li>
+          <li><a href="#radar-chart">RadarChart</a></li>
+          <li><a href="#timeline">Timeline</a></li>
+          <li><a href="#comparison-table">ComparisonTable</a></li>
+          <li><a href="#flow-diagram">FlowDiagram</a></li>
+        </ul>
+      </nav>
+
+      <!-- Category Theming Info -->
+      <section class="component-section">
+        <h2 class="component-title">Category Theming</h2>
+        <p class="component-description">
+          All chart components accept a <code>category</code> prop that automatically applies a color scheme.
+          This helps maintain visual consistency with your article's topic.
+        </p>
+        <div class="category-demo">
+          <span class="category-chip microbiology">microbiology</span>
+          <span class="category-chip plant-biology">plant-biology</span>
+          <span class="category-chip fermentation">fermentation</span>
+          <span class="category-chip soil-science">soil-science</span>
+          <span class="category-chip default">default</span>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- BarChart -->
+      <section id="bar-chart" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">BarChart</h2>
+          <span class="component-badge">Comparison</span>
+        </header>
+        <p class="component-description">
+          A flexible bar chart for visualizing comparisons. Supports simple bars, grouped bars, negative values,
+          and optional value labels.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Simple Bar Chart</p>
+          <BarChart
+            data={[
+              { label: 'Control', value: 100 },
+              { label: 'LAB Treatment', value: 119 },
+              { label: 'FPE Treatment', value: 121 }
+            ]}
+            title="Yield Comparison by Treatment"
+            yLabel="Relative Yield (%)"
+            unit="%"
+            category="microbiology"
+          />
+        </div>
+
+        <div class="example-container">
+          <p class="example-label">Grouped Bar Chart (with negative values)</p>
+          <BarChart
+            data={[
+              { label: 'Columbia', values: [
+                { label: 'Control', value: 0 },
+                { label: 'JA', value: 52.7 },
+                { label: 'SA', value: -15 }
+              ]},
+              { label: 'jar1-1', values: [
+                { label: 'Control', value: 0 },
+                { label: 'JA', value: 55.9 },
+                { label: 'SA', value: -12 }
+              ]}
+            ]}
+            title="Trichome Density Change by Treatment"
+            yLabel="Change (%)"
+            unit="%"
+            yMin={-30}
+            yMax={70}
+            category="plant-biology"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<BarChart
+  data={[
+    { label: 'Control', value: 100 },
+    { label: 'LAB Treatment', value: 119 },
+    { label: 'FPE Treatment', value: 121 }
+  ]}
+  title="Yield Comparison by Treatment"
+  yLabel="Relative Yield (%)"
+  unit="%"
+  category="microbiology"
+/>`}</code>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- LineChart -->
+      <section id="line-chart" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">LineChart</h2>
+          <span class="component-badge">Time Series</span>
+        </header>
+        <p class="component-description">
+          An SVG-based line chart for time-series and spectrum data. Supports multiple series,
+          smooth curves, area fills, and data point markers.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Fermentation pH Curve</p>
+          <LineChart
+            series={[
+              {
+                name: 'pH Level',
+                data: [
+                  { x: 0, y: 6.2 },
+                  { x: 1, y: 5.8 },
+                  { x: 2, y: 5.1 },
+                  { x: 3, y: 4.6 },
+                  { x: 5, y: 4.0 },
+                  { x: 7, y: 3.6 },
+                  { x: 10, y: 3.3 },
+                  { x: 14, y: 3.2 }
+                ]
+              }
+            ]}
+            title="FPE Fermentation pH Over Time"
+            xLabel="Days"
+            yLabel="pH"
+            yMin={3}
+            yMax={7}
+            category="fermentation"
+          />
+        </div>
+
+        <div class="example-container">
+          <p class="example-label">Multi-Series with Area Fill</p>
+          <LineChart
+            series={[
+              {
+                name: 'Chlorophyll A',
+                data: [
+                  { x: 400, y: 0.8 },
+                  { x: 430, y: 0.95 },
+                  { x: 450, y: 0.7 },
+                  { x: 500, y: 0.2 },
+                  { x: 550, y: 0.15 },
+                  { x: 600, y: 0.25 },
+                  { x: 650, y: 0.85 },
+                  { x: 680, y: 0.92 },
+                  { x: 700, y: 0.5 }
+                ],
+                color: '#16a34a'
+              },
+              {
+                name: 'Chlorophyll B',
+                data: [
+                  { x: 400, y: 0.6 },
+                  { x: 450, y: 0.9 },
+                  { x: 480, y: 0.75 },
+                  { x: 500, y: 0.3 },
+                  { x: 550, y: 0.2 },
+                  { x: 600, y: 0.35 },
+                  { x: 640, y: 0.88 },
+                  { x: 660, y: 0.7 },
+                  { x: 700, y: 0.3 }
+                ],
+                color: '#22c55e'
+              }
+            ]}
+            title="Light Absorption Spectrum"
+            xLabel="Wavelength (nm)"
+            yLabel="Absorption"
+            showArea={true}
+            category="plant-biology"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<LineChart
+  series={[
+    {
+      name: 'pH Level',
+      data: [
+        { x: 0, y: 6.2 },
+        { x: 7, y: 3.6 },
+        { x: 14, y: 3.2 }
+      ]
+    }
+  ]}
+  title="Fermentation pH Over Time"
+  xLabel="Days"
+  yLabel="pH"
+  category="fermentation"
+/>`}</code>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- RadarChart -->
+      <section id="radar-chart" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">RadarChart</h2>
+          <span class="component-badge">Multi-Dimensional</span>
+        </header>
+        <p class="component-description">
+          A radar/spider chart for comparing multiple properties across different items.
+          Perfect for mineral profiles, nutrient ratios, or multi-factor assessments.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Rock Dust Mineral Profiles</p>
+          <RadarChart
+            axes={[
+              { key: 'silica', label: 'Silica', max: 100 },
+              { key: 'calcium', label: 'Calcium', max: 100 },
+              { key: 'magnesium', label: 'Magnesium', max: 100 },
+              { key: 'iron', label: 'Iron', max: 100 },
+              { key: 'trace', label: 'Trace Elements', max: 100 }
+            ]}
+            datasets={[
+              { 
+                name: 'Azomite', 
+                values: { silica: 65, calcium: 45, magnesium: 30, iron: 55, trace: 90 }
+              },
+              { 
+                name: 'Basalt', 
+                values: { silica: 95, calcium: 25, magnesium: 45, iron: 80, trace: 40 }
+              }
+            ]}
+            title="Rock Dust Mineral Comparison"
+            category="soil-science"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<RadarChart
+  axes={[
+    { key: 'silica', label: 'Silica', max: 100 },
+    { key: 'calcium', label: 'Calcium', max: 100 },
+    { key: 'magnesium', label: 'Magnesium', max: 100 }
+  ]}
+  datasets={[
+    { name: 'Azomite', values: { silica: 65, calcium: 45, magnesium: 30 } },
+    { name: 'Basalt', values: { silica: 95, calcium: 25, magnesium: 45 } }
+  ]}
+  title="Rock Dust Mineral Comparison"
+  category="soil-science"
+/>`}</code>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- Timeline -->
+      <section id="timeline" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">Timeline</h2>
+          <span class="component-badge">Process</span>
+        </header>
+        <p class="component-description">
+          A horizontal or vertical process visualization for multi-step procedures.
+          Supports duration labels, step descriptions, and status indicators.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Horizontal Timeline (BIM Culturing)</p>
+          <Timeline
+            steps={[
+              { title: 'BIM-1', duration: '5-7 days', description: 'Rice wash inoculation' },
+              { title: 'BIM-2', duration: '7 days', description: 'Milk fermentation' },
+              { title: 'BIM-3', duration: '5 days', description: 'Molasses activation' },
+              { title: 'BIM-4', duration: '7 days', description: 'Final maturation' }
+            ]}
+            title="BIM Culturing Process"
+            category="fermentation"
+          />
+        </div>
+
+        <div class="example-container">
+          <p class="example-label">Vertical Timeline with Status</p>
+          <Timeline
+            steps={[
+              { title: 'Day 0-3', description: 'Active fermentation begins', status: 'complete' },
+              { title: 'Day 4-7', description: 'pH stabilizing (4.0-4.5)', status: 'complete' },
+              { title: 'Day 8-10', description: 'Lactobacillus dominance', status: 'active' },
+              { title: 'Day 11-14', description: 'Final maturation', status: 'pending' }
+            ]}
+            title="Fermentation Phases"
+            orientation="vertical"
+            category="microbiology"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<Timeline
+  steps={[
+    { title: 'BIM-1', duration: '5-7 days', description: 'Rice wash' },
+    { title: 'BIM-2', duration: '7 days', description: 'Milk fermentation' }
+  ]}
+  title="BIM Culturing Process"
+  orientation="horizontal"
+  category="fermentation"
+/>`}</code>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- ComparisonTable -->
+      <section id="comparison-table" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">ComparisonTable</h2>
+          <span class="component-badge">Data</span>
+        </header>
+        <p class="component-description">
+          A styled data table with optional heat-map coloring for cells.
+          Great for comparing properties across multiple items.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Rock Dust Composition with Heat Map</p>
+          <ComparisonTable
+            columns={['Property', 'Azomite', 'GRD', 'Basalt', 'Gypsum']}
+            rows={[
+              { header: 'Silica', cells: [
+                { value: 'Medium', heatValue: 0.5 },
+                { value: 'Medium', heatValue: 0.5 },
+                { value: 'High', heatValue: 0.8 },
+                { value: 'None', heatValue: 0 }
+              ]},
+              { header: 'Calcium', cells: [
+                { value: 'High', heatValue: 0.7 },
+                { value: 'Low', heatValue: 0.2 },
+                { value: 'Low', heatValue: 0.2 },
+                { value: 'Very High', heatValue: 1.0 }
+              ]},
+              { header: 'Lead/Arsenic Risk', cells: [
+                { value: 'High', heatValue: 0.9, highlight: true },
+                { value: 'Low', heatValue: 0.2 },
+                { value: 'Very Low', heatValue: 0.1 },
+                { value: 'None', heatValue: 0 }
+              ]}
+            ]}
+            title="Rock Dust Composition Comparison"
+            showHeat={true}
+            heatColors={{ low: '#dcfce7', high: '#fecaca' }}
+            category="soil-science"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<ComparisonTable
+  columns={['Property', 'Azomite', 'GRD', 'Basalt']}
+  rows={[
+    { header: 'Silica', cells: [
+      { value: 'Medium', heatValue: 0.5 },
+      { value: 'Medium', heatValue: 0.5 },
+      { value: 'High', heatValue: 0.8 }
+    ]},
+    { header: 'Lead Risk', cells: [
+      { value: 'High', heatValue: 0.9, highlight: true },
+      { value: 'Low', heatValue: 0.2 },
+      { value: 'Very Low', heatValue: 0.1 }
+    ]}
+  ]}
+  showHeat={true}
+  category="soil-science"
+/>`}</code>
+        </div>
+      </section>
+
+      <div class="divider"></div>
+
+      <!-- FlowDiagram -->
+      <section id="flow-diagram" class="component-section">
+        <header class="component-header">
+          <h2 class="component-title">FlowDiagram</h2>
+          <span class="component-badge">Pathway</span>
+        </header>
+        <p class="component-description">
+          A flow/pathway diagram for visualizing biosynthesis routes, process flows, or 
+          decision trees. Supports different node types and automatic layout.
+        </p>
+
+        <div class="example-container">
+          <p class="example-label">Cannabinoid Biosynthesis Pathway</p>
+          <FlowDiagram
+            nodes={[
+              { id: 'gpp', label: 'GPP', description: 'Geranyl pyrophosphate', type: 'input' },
+              { id: 'cbga', label: 'CBGA', description: 'Cannabigerolic acid', type: 'process' },
+              { id: 'thca', label: 'THCA', type: 'output' },
+              { id: 'cbda', label: 'CBDA', type: 'output' },
+              { id: 'cbca', label: 'CBCA', type: 'output' }
+            ]}
+            connections={[
+              { from: 'gpp', to: 'cbga' },
+              { from: 'cbga', to: 'thca' },
+              { from: 'cbga', to: 'cbda' },
+              { from: 'cbga', to: 'cbca' }
+            ]}
+            title="Cannabinoid Biosynthesis Pathway"
+            direction="horizontal"
+            category="plant-biology"
+          />
+        </div>
+
+        <div class="example-container">
+          <p class="example-label">LAB Culturing Process</p>
+          <FlowDiagram
+            nodes={[
+              { id: 'rice', label: 'Rice Wash', description: 'Starchy water', type: 'input' },
+              { id: 'wild', label: 'Wild Ferment', description: '5-7 days', type: 'process' },
+              { id: 'milk', label: 'Milk Addition', description: '1:10 ratio', type: 'process' },
+              { id: 'serum', label: 'LAB Serum', description: 'Clear liquid', type: 'output' }
+            ]}
+            connections={[
+              { from: 'rice', to: 'wild' },
+              { from: 'wild', to: 'milk' },
+              { from: 'milk', to: 'serum' }
+            ]}
+            title="LAB Serum Production"
+            direction="horizontal"
+            category="fermentation"
+          />
+        </div>
+
+        <div class="code-block">
+          <code>{`<FlowDiagram
+  nodes={[
+    { id: 'input', label: 'Rice Wash', type: 'input' },
+    { id: 'process', label: 'Fermentation', type: 'process' },
+    { id: 'output', label: 'LAB Serum', type: 'output' }
+  ]}
+  connections={[
+    { from: 'input', to: 'process' },
+    { from: 'process', to: 'output' }
+  ]}
+  title="LAB Serum Production"
+  direction="horizontal"
+  category="fermentation"
+/>`}</code>
+        </div>
+      </section>
+
+    </main>
+    <Footer />
+  </body>
+</html>

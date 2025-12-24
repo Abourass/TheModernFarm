@@ -1,0 +1,489 @@
+---
+/**
+ * LineChart.astro
+ * 
+ * An SVG-based line chart for time-series and spectrum data.
+ * Supports multiple series, smooth curves, area fills, and category-based theming.
+ * 
+ * Usage in MDX:
+ *   import LineChart from '../components/charts/LineChart.astro';
+ *   
+ *   <LineChart
+ *     series={[
+ *       {
+ *         name: 'pH Level',
+ *         data: [
+ *           { x: 0, y: 6.2 },
+ *           { x: 1, y: 5.8 },
+ *           { x: 2, y: 5.1 },
+ *           { x: 7, y: 3.4 },
+ *           { x: 14, y: 3.2 }
+ *         ]
+ *       }
+ *     ]}
+ *     title="Fermentation pH Over Time"
+ *     xLabel="Days"
+ *     yLabel="pH"
+ *     category="fermentation"
+ *   />
+ * 
+ * Multiple series (e.g., absorption spectrum):
+ *   <LineChart
+ *     series={[
+ *       { name: 'Chlorophyll A', data: [...], color: '#22c55e' },
+ *       { name: 'Chlorophyll B', data: [...], color: '#16a34a' }
+ *     ]}
+ *     title="Light Absorption Spectrum"
+ *     xLabel="Wavelength (nm)"
+ *     yLabel="Absorption"
+ *     showArea={true}
+ *   />
+ */
+
+import type { LineChartProps, LineChartSeries, ChartCategory } from '../../types';
+
+interface Props extends LineChartProps {}
+
+const {
+  series,
+  title,
+  caption,
+  xLabel,
+  yLabel,
+  xMin: providedXMin,
+  xMax: providedXMax,
+  yMin: providedYMin,
+  yMax: providedYMax,
+  showDots = true,
+  smooth = true,
+  showArea = false,
+  category = 'default',
+} = Astro.props;
+
+// Category color schemes
+const categoryColors: Record<ChartCategory, string[]> = {
+  'microbiology': ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
+  'plant-biology': ['#16a34a', '#22c55e', '#4ade80', '#86efac'],
+  'fermentation': ['#ea580c', '#f97316', '#fb923c', '#fdba74'],
+  'soil-science': ['#78716c', '#a8a29e', '#d6d3d1', '#e7e5e4'],
+  'default': ['#0d9488', '#14b8a6', '#2dd4bf', '#5eead4'],
+};
+
+const chartColors = categoryColors[category];
+
+// Calculate bounds
+const allXValues = series.flatMap(s => s.data.map(d => d.x));
+const allYValues = series.flatMap(s => s.data.map(d => d.y));
+
+const xMin = providedXMin ?? Math.min(...allXValues);
+const xMax = providedXMax ?? Math.max(...allXValues);
+const yMin = providedYMin ?? Math.floor(Math.min(...allYValues) * 0.9);
+const yMax = providedYMax ?? Math.ceil(Math.max(...allYValues) * 1.1);
+
+const xRange = xMax - xMin || 1;
+const yRange = yMax - yMin || 1;
+
+// SVG dimensions
+const width = 600;
+const height = 300;
+const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+const chartWidth = width - padding.left - padding.right;
+const chartHeight = height - padding.top - padding.bottom;
+
+// Scale functions
+function scaleX(x: number): number {
+  return padding.left + ((x - xMin) / xRange) * chartWidth;
+}
+
+function scaleY(y: number): number {
+  return padding.top + chartHeight - ((y - yMin) / yRange) * chartHeight;
+}
+
+// Generate path data
+function generatePath(data: { x: number; y: number }[], isSmooth: boolean): string {
+  if (data.length === 0) return '';
+  
+  const sortedData = [...data].sort((a, b) => a.x - b.x);
+  
+  if (!isSmooth || sortedData.length < 3) {
+    // Simple line
+    return sortedData
+      .map((point, i) => `${i === 0 ? 'M' : 'L'} ${scaleX(point.x)} ${scaleY(point.y)}`)
+      .join(' ');
+  }
+  
+  // Catmull-Rom to Bezier conversion for smooth curves
+  let path = `M ${scaleX(sortedData[0].x)} ${scaleY(sortedData[0].y)}`;
+  
+  for (let i = 0; i < sortedData.length - 1; i++) {
+    const p0 = sortedData[Math.max(0, i - 1)];
+    const p1 = sortedData[i];
+    const p2 = sortedData[i + 1];
+    const p3 = sortedData[Math.min(sortedData.length - 1, i + 2)];
+    
+    const x1 = scaleX(p1.x) + (scaleX(p2.x) - scaleX(p0.x)) / 6;
+    const y1 = scaleY(p1.y) + (scaleY(p2.y) - scaleY(p0.y)) / 6;
+    const x2 = scaleX(p2.x) - (scaleX(p3.x) - scaleX(p1.x)) / 6;
+    const y2 = scaleY(p2.y) - (scaleY(p3.y) - scaleY(p1.y)) / 6;
+    
+    path += ` C ${x1} ${y1}, ${x2} ${y2}, ${scaleX(p2.x)} ${scaleY(p2.y)}`;
+  }
+  
+  return path;
+}
+
+// Generate area path (closes the path to bottom)
+function generateAreaPath(data: { x: number; y: number }[], isSmooth: boolean): string {
+  const linePath = generatePath(data, isSmooth);
+  if (!linePath) return '';
+  
+  const sortedData = [...data].sort((a, b) => a.x - b.x);
+  const lastX = scaleX(sortedData[sortedData.length - 1].x);
+  const firstX = scaleX(sortedData[0].x);
+  const bottomY = scaleY(yMin);
+  
+  return `${linePath} L ${lastX} ${bottomY} L ${firstX} ${bottomY} Z`;
+}
+
+// Generate axis ticks
+const xTickCount = 6;
+const yTickCount = 5;
+
+const xTicks = Array.from({ length: xTickCount }, (_, i) => {
+  const value = xMin + (xRange / (xTickCount - 1)) * i;
+  return { value, x: scaleX(value) };
+});
+
+const yTicks = Array.from({ length: yTickCount }, (_, i) => {
+  const value = yMin + (yRange / (yTickCount - 1)) * i;
+  return { value: Math.round(value * 100) / 100, y: scaleY(value) };
+});
+
+const chartId = `line-chart-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<figure class={`chart-container category-${category}`} role="figure" aria-labelledby={`${chartId}-title`}>
+  {title && <figcaption id={`${chartId}-title`} class="chart-title">{title}</figcaption>}
+  
+  <div class="chart-wrapper">
+    {yLabel && <span class="axis-label y-axis-label">{yLabel}</span>}
+    
+    <svg 
+      viewBox={`0 0 ${width} ${height}`} 
+      class="chart-svg"
+      role="img"
+      aria-label={title || 'Line chart'}
+    >
+      <!-- Grid lines -->
+      <g class="grid-lines">
+        {yTicks.map((tick) => (
+          <line 
+            x1={padding.left} 
+            y1={tick.y} 
+            x2={width - padding.right} 
+            y2={tick.y} 
+            class="grid-line"
+          />
+        ))}
+        {xTicks.map((tick) => (
+          <line 
+            x1={tick.x} 
+            y1={padding.top} 
+            x2={tick.x} 
+            y2={height - padding.bottom} 
+            class="grid-line vertical"
+          />
+        ))}
+      </g>
+      
+      <!-- Axes -->
+      <g class="axes">
+        <line 
+          x1={padding.left} 
+          y1={height - padding.bottom} 
+          x2={width - padding.right} 
+          y2={height - padding.bottom} 
+          class="axis-line"
+        />
+        <line 
+          x1={padding.left} 
+          y1={padding.top} 
+          x2={padding.left} 
+          y2={height - padding.bottom} 
+          class="axis-line"
+        />
+      </g>
+      
+      <!-- Y-axis labels -->
+      <g class="y-axis-labels">
+        {yTicks.map((tick) => (
+          <text x={padding.left - 8} y={tick.y} class="tick-label y-tick">
+            {tick.value}
+          </text>
+        ))}
+      </g>
+      
+      <!-- X-axis labels -->
+      <g class="x-axis-labels">
+        {xTicks.map((tick) => (
+          <text x={tick.x} y={height - padding.bottom + 20} class="tick-label x-tick">
+            {Math.round(tick.value * 10) / 10}
+          </text>
+        ))}
+      </g>
+      
+      <!-- Data series -->
+      {series.map((s, seriesIndex) => {
+        const color = s.color || chartColors[seriesIndex % chartColors.length];
+        const sortedData = [...s.data].sort((a, b) => a.x - b.x);
+        
+        return (
+          <g class="data-series" data-series={s.name}>
+            {/* Area fill */}
+            {showArea && (
+              <path 
+                d={generateAreaPath(s.data, smooth)} 
+                class="area-fill"
+                style={`fill: ${color}; opacity: 0.15;`}
+              />
+            )}
+            
+            {/* Line */}
+            <path 
+              d={generatePath(s.data, smooth)} 
+              class={`data-line ${s.dashed ? 'dashed' : ''}`}
+              style={`stroke: ${color};`}
+            />
+            
+            {/* Data points */}
+            {showDots && sortedData.map((point) => (
+              <g class="data-point-group">
+                <circle 
+                  cx={scaleX(point.x)} 
+                  cy={scaleY(point.y)} 
+                  r="4"
+                  class="data-point"
+                  style={`fill: ${color};`}
+                />
+                <title>{`${s.name}: (${point.x}, ${point.y})${point.label ? ` - ${point.label}` : ''}`}</title>
+              </g>
+            ))}
+          </g>
+        );
+      })}
+    </svg>
+    
+    {xLabel && <span class="axis-label x-axis-label">{xLabel}</span>}
+  </div>
+  
+  <!-- Legend -->
+  {series.length > 1 && (
+    <div class="chart-legend">
+      {series.map((s, index) => (
+        <div class="legend-item">
+          <span 
+            class={`legend-line ${s.dashed ? 'dashed' : ''}`} 
+            style={`background-color: ${s.color || chartColors[index % chartColors.length]};`}
+          />
+          <span class="legend-label">{s.name}</span>
+        </div>
+      ))}
+    </div>
+  )}
+  
+  {caption && <p class="chart-caption">{caption}</p>}
+</figure>
+
+<style>
+  .chart-container {
+    background: white;
+    border: 1px solid rgb(var(--gray-light));
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  :root.dark-theme .chart-container {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .chart-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgb(var(--black));
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .chart-wrapper {
+    position: relative;
+  }
+
+  .chart-svg {
+    width: 100%;
+    height: auto;
+    max-height: 350px;
+  }
+
+  .axis-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgb(var(--gray));
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  .y-axis-label {
+    position: absolute;
+    left: -0.25rem;
+    top: 50%;
+    transform: rotate(-90deg) translateX(-50%);
+    transform-origin: left center;
+    white-space: nowrap;
+  }
+
+  .x-axis-label {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+
+  .grid-line {
+    stroke: rgb(var(--gray-light));
+    stroke-width: 1;
+  }
+
+  .grid-line.vertical {
+    stroke-dasharray: 4 4;
+    opacity: 0.5;
+  }
+
+  :root.dark-theme .grid-line {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+
+  .axis-line {
+    stroke: rgb(var(--gray));
+    stroke-width: 1;
+  }
+
+  .tick-label {
+    font-size: 10px;
+    fill: rgb(var(--gray));
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
+  }
+
+  .y-tick {
+    text-anchor: end;
+    dominant-baseline: middle;
+  }
+
+  .x-tick {
+    text-anchor: middle;
+    dominant-baseline: hanging;
+  }
+
+  .data-line {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .data-line.dashed {
+    stroke-dasharray: 8 4;
+  }
+
+  .area-fill {
+    stroke: none;
+  }
+
+  .data-point {
+    stroke: white;
+    stroke-width: 2;
+    transition: r 0.2s ease;
+  }
+
+  :root.dark-theme .data-point {
+    stroke: #1c1917;
+  }
+
+  .data-point-group:hover .data-point {
+    r: 6;
+  }
+
+  .chart-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .legend-line {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .legend-line.dashed {
+    background: repeating-linear-gradient(
+      90deg,
+      currentColor 0,
+      currentColor 4px,
+      transparent 4px,
+      transparent 8px
+    );
+  }
+
+  .legend-label {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+  }
+
+  .chart-caption {
+    font-size: 0.75rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    margin: 1rem 0 0 0;
+    font-style: italic;
+  }
+
+  /* Category-specific accent borders */
+  .chart-container.category-microbiology {
+    border-left: 3px solid #8b5cf6;
+  }
+
+  .chart-container.category-plant-biology {
+    border-left: 3px solid #16a34a;
+  }
+
+  .chart-container.category-fermentation {
+    border-left: 3px solid #ea580c;
+  }
+
+  .chart-container.category-soil-science {
+    border-left: 3px solid #78716c;
+  }
+
+  .chart-container.category-default {
+    border-left: 3px solid var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .chart-container {
+      padding: 1rem;
+    }
+
+    .chart-legend {
+      gap: 0.75rem;
+    }
+  }
+</style>
