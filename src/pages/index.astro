@@ -6,6 +6,7 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import GlossaryTerm from "../components/GlossaryTerm.astro";
+import SoilFoodWeb from "../components/SoilFoodWeb.astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 
 // Get recent articles and tutorials
@@ -36,14 +37,36 @@ const phData = [6.2, 5.8, 5.1, 4.6, 4.2, 3.9, 3.6, 3.4, 3.3, 3.2, 3.2, 3.2, 3.2,
 			/* Hero Section - Modernist Cuisine inspired */
 			.hero-section {
 				display: grid;
-				grid-template-columns: 7fr 5fr;
-				gap: 2rem;
-				padding: 6rem 0;
+				grid-template-columns: 1fr auto;
+				gap: clamp(32px, 5vw, 80px);
+				padding: clamp(3rem, 6vh, 5rem) 0;
 				align-items: center;
 			}
 
 			.hero-content {
-				max-width: 600px;
+				max-width: 520px;
+			}
+
+			.hero-tagline {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 0.72rem;
+				letter-spacing: 0.15em;
+			}
+			.hero-tagline::before {
+				content: "";
+				display: inline-block;
+				width: 20px;
+				height: 1px;
+				background: var(--accent);
+			}
+
+			.hero-visual {
+				display: flex;
+				justify-content: flex-end;
+				flex-shrink: 0;
 			}
 
 			.hero-tagline {
@@ -68,138 +91,6 @@ const phData = [6.2, 5.8, 5.1, 4.6, 4.2, 3.9, 3.6, 3.4, 3.3, 3.2, 3.2, 3.2, 3.2,
 				color: rgb(var(--gray));
 				line-height: 1.7;
 				margin: 0;
-			}
-
-			.hero-visual {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-
-			/* Abstract soil food web diagram */
-			.soil-web-diagram {
-				position: relative;
-				width: 280px;
-				height: 280px;
-			}
-
-			.diagram-svg {
-				position: absolute;
-				inset: 0;
-				width: 100%;
-				height: 100%;
-			}
-
-			.diagram-label {
-				position: absolute;
-				font-size: 0.65rem;
-				text-transform: uppercase;
-				letter-spacing: 0.1em;
-				color: rgb(var(--gray));
-				font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace;
-			}
-
-			.diagram-label-top {
-				top: 0.25rem;
-				left: 50%;
-				transform: translateX(-50%);
-			}
-
-			.diagram-label-bottom {
-				bottom: 0.25rem;
-				left: 50%;
-				transform: translateX(-50%);
-			}
-
-			.diagram-label-left {
-				left: 0.25rem;
-				top: 50%;
-				transform: translateY(-50%) rotate(-90deg);
-				transform-origin: center;
-			}
-
-			.diagram-label-right {
-				right: 0.25rem;
-				top: 50%;
-				transform: translateY(-50%) rotate(90deg);
-				transform-origin: center;
-			}
-
-			.orbit {
-				position: absolute;
-				border: 1px solid rgba(var(--gray), 0.2);
-				border-radius: 50%;
-			}
-
-			.orbit-1 {
-				width: 100%;
-				height: 100%;
-				top: 0;
-				left: 0;
-			}
-
-			.orbit-2 {
-				width: 70%;
-				height: 70%;
-				top: 15%;
-				left: 15%;
-			}
-
-			.orbit-3 {
-				width: 40%;
-				height: 40%;
-				top: 30%;
-				left: 30%;
-			}
-
-			.node {
-				position: absolute;
-				border-radius: 50%;
-			}
-
-			.node-center {
-				width: 24px;
-				height: 24px;
-				background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			}
-
-			.node-1 {
-				width: 12px;
-				height: 12px;
-				background: var(--accent-light);
-				opacity: 0.8;
-				top: 10%;
-				left: 48%;
-			}
-
-			.node-2 {
-				width: 16px;
-				height: 16px;
-				background: var(--accent);
-				opacity: 0.6;
-				top: 75%;
-				left: 20%;
-			}
-
-			.node-3 {
-				width: 10px;
-				height: 10px;
-				background: var(--accent-light);
-				opacity: 0.7;
-				top: 60%;
-				left: 80%;
-			}
-
-			.node-4 {
-				width: 8px;
-				height: 8px;
-				background: var(--accent);
-				opacity: 0.5;
-				top: 25%;
-				left: 15%;
 			}
 
 			/* Divider */
@@ -559,11 +450,7 @@ const phData = [6.2, 5.8, 5.1, 4.6, 4.2, 3.9, 3.6, 3.4, 3.3, 3.2, 3.2, 3.2, 3.2,
 
 				.hero-visual {
 					order: -1;
-				}
-
-				.soil-web-diagram {
-					width: 180px;
-					height: 180px;
+					justify-content: center;
 				}
 
 				.hero-title {
@@ -602,29 +489,7 @@ const phData = [6.2, 5.8, 5.1, 4.6, 4.2, 3.9, 3.6, 3.4, 3.3, 3.2, 3.2, 3.2, 3.2,
 					</p>
 				</div>
 				<div class="hero-visual">
-					<div class="soil-web-diagram">
-						<!-- SVG crosshair lines -->
-						<svg class="diagram-svg" viewBox="0 0 280 280">
-							<line x1="140" y1="0" x2="140" y2="280" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
-							<line x1="0" y1="140" x2="280" y2="140" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
-							<line x1="40" y1="40" x2="240" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
-							<line x1="240" y1="40" x2="40" y2="240" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" opacity="0.2" />
-						</svg>
-						<!-- Labels -->
-						<span class="diagram-label diagram-label-top">Atmosphere</span>
-						<span class="diagram-label diagram-label-bottom">Substrate</span>
-						<span class="diagram-label diagram-label-left">Microbiome</span>
-						<span class="diagram-label diagram-label-right">Plant</span>
-						<!-- Orbits -->
-						<div class="orbit orbit-1"></div>
-						<div class="orbit orbit-2"></div>
-						<div class="orbit orbit-3"></div>
-						<div class="node node-center"></div>
-						<div class="node node-1"></div>
-						<div class="node node-2"></div>
-						<div class="node node-3"></div>
-						<div class="node node-4"></div>
-					</div>
+					<SoilFoodWeb />
 				</div>
 			</section>
 
